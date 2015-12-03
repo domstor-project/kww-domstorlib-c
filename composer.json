@@ -1,0 +1,21 @@
+{
+    "name": "stepanets/kww-domstorlib",
+    "authors": [
+        {
+            "name": "Pavel Stepanets",
+            "email": "pahhan.ne@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.1.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "SP_": "lib/",
+            "Doctrine_": "lib/",
+            "Domstor_": "lib/"
+            ,
+            "files": ["lib/domstorlib.php", "lib/htmllib.php"]
+        }
+    }
+}
