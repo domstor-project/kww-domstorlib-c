@@ -17,8 +17,15 @@ class Domstor_Builder
         $domstor = new Domstor_Domstor($o['org_id'], $o['location_id']);
         if (isset($o['cache'])) {
             $options = isset($o['cache']['options'])? $o['cache']['options'] : array();
-            $domstor->setCacheDriver($this->buildCacheDreiver($o['cache']['type'], $options));
+            $domstor->setCacheDriver($this->buildCacheDriver($o['cache']['type'], $options));
             $domstor->setCacheTime($o['cache']['time']);
+        }
+        
+        if (isset($o['filter'])) {
+            $of = $o['filter'];
+            if (isset($of['template_dir'])) {
+                $domstor->setFilterTmplDir($of['template_dir']);
+            }
         }
         
         return $domstor;
@@ -31,7 +38,7 @@ class Domstor_Builder
      * @return Doctrine_Cache_Driver
      * @throws Exception
      */
-    private function buildCacheDreiver($type, array $options = array())
+    protected function buildCacheDriver($type, array $options = array())
     {
         switch ($type) {
             case 'array':

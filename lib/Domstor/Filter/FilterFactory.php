@@ -3,11 +3,11 @@
 require_once dirname(__FILE__) . '/builders.php';
 
 /**
- * Description of Factory
  *
- * @author pahhan
+ * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_Filter_FilterFactory {
+class Domstor_Filter_FilterFactory implements Domstor_Filter_FilterFactoryInterface
+{
 
     /**
      *
@@ -16,7 +16,8 @@ class Domstor_Filter_FilterFactory {
      * @param array $params
      * @return Domstor_Filter_Form
      */
-    public function create($object, $action, array $params = array()) {
+    public function create($object, $action, array $params = array())
+    {
         if (Domstor_Helper::isCommerceType($object)) {
             $object = 'commerce';
         }
@@ -29,7 +30,11 @@ class Domstor_Filter_FilterFactory {
         $builder = new $builder_class;
         $builder->setDomstor($params['domstor'])->setObject($object)->setAction($action);
         $template = dirname(__FILE__) . '/view/' . $object . '_' . $action . '_tmpl.php';
-        if (!empty($params['filter_dir'])) {
+        if (isset($params['filter_dir'])) {
+            $dir = $params['filter_dir'];
+            if (!is_readable($dir) || !is_dir($dir)) {
+                throw new Exception(sprintf('Filter template dir "%s" is not dir or not readable', $dir));
+            }
             $fd = rtrim($params['filter_dir'], '/\\') . '/' . $object . '_' . $action . '_tmpl.php';
             if (is_file($fd) and is_readable($fd)) {
                 $template = $fd;

@@ -8,7 +8,7 @@
 /**
  * Description of file
  *
- * @author pahhan
+ * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
 class SP_Cache_File extends Doctrine_Cache_Driver
 {

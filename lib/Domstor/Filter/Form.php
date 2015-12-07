@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Description of Form
  *
- * @author pahhan
+ * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
 class Domstor_Filter_Form extends SP_Form_Form {
 

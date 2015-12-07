@@ -66,6 +66,18 @@ class Domstor_Domstor
      * @var Domstor_DataProviderInterface
      */
     protected $siteMapDataProvider;
+    
+    /**
+     *
+     * @var Domstor_List_ListFactoryInterface; 
+     */
+    protected $listFactory;
+    
+    /**
+     *
+     * @var Domstor_Filter_FilterFactory; 
+     */
+    protected $filterFactory;
 
     public static function checkObjectAction($object, $action) {
         return Domstor_Helper::checkEstateAction($object, $action);
@@ -78,8 +90,26 @@ class Domstor_Domstor
         $this->sort_client = new Domstor_SortClient();
         $this->pager = new SP_Helper_Pager();
         $this->filter_data_loader_config = new Domstor_Filter_DataLoaderConfig();
+        $this->filterFactory = new Domstor_Filter_FilterFactory();
+    }
+    
+    
+    public function setListFactory(Domstor_List_ListFactoryInterface $listFactory)
+    {
+        $this->listFactory = $listFactory;
+
+        return $this;
+    }
+    
+    public function setFilterFactory(Domstor_Filter_FilterFactory $filterFactory)
+    {
+        $this->filterFactory = $filterFactory;
+
+        return $this;
     }
 
+    
+    
     /**
      *
      * @return type DomstorSiteMapGenerator
@@ -316,11 +346,11 @@ class Domstor_Domstor
     }
 
     public function createFilter($object, $action, array $filter_factory_params = array()) {
-        $filter_factory = new Domstor_Filter_FilterFactory;
-        if (!isset($filter_factory_params['filter_dir']))
+        if (!isset($filter_factory_params['filter_dir'])) {
             $filter_factory_params['filter_dir'] = $this->filter_tmpl_dir;
+        }
         $filter_factory_params['domstor'] = $this;
-        $this->filter = $filter_factory->create($object, $action, $filter_factory_params);
+        $this->filter = $this->filterFactory->create($object, $action, $filter_factory_params);
         return $this->filter;
     }
 
@@ -330,7 +360,7 @@ class Domstor_Domstor
      * @param string $action
      * @param integer $page
      * @param array $params
-     * @return boolean|Domstor_List_Common
+     * @return Domstor_List_Common
      */
     public function getList($object, $action, $page, array $params = array()) {
         // Упаковываем $object, $action и $page в параметры
@@ -353,7 +383,7 @@ class Domstor_Domstor
         $total = array_pop($data);
 
         // Создаем фабрику списков
-        $factory = new Domstor_List_ListFactory;
+        $factory = new Domstor_List_ListFactory();
 
         // Получаем параметры для списка
         $list_params = $this->_prepareListParams($params);
@@ -361,9 +391,6 @@ class Domstor_Domstor
 
         // Фабрика создает список
         $list = $factory->create($object, $action, $list_params);
-
-        if (!$list)
-            return FALSE;
 
         // Создаем объект pager постраничного вывода
         $this->pager->init(array(
@@ -377,8 +404,6 @@ class Domstor_Domstor
             'current' => $page,
         ));
 
-        // Добавляем html-код pagera в список
-        //$list->setPagination($this->getPager()->display($params['page'], array(), TRUE));
         $list->setPager($this->pager);
         $list->setFilter($filter);
 

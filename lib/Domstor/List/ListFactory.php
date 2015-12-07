@@ -3,26 +3,31 @@
 /**
  * Description of ListFactory
  *
- * @author pahhan
+ * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_List_ListFactory
+class Domstor_List_ListFactory implements Domstor_List_ListFactoryInterface
 {
-	/**
+
+    /**
      *
-     * @param type $object
-     * @param type $action
+     * @param string $object
+     * @param string $action
      * @param array $params
-     * @return boolean|Domstor_List_Common
+     * @return Domstor_List_Common
      */
-    public function create($object, $action, array $params)
-	{
-		if( !Domstor_Helper::checkEstateAction( $object, $action) )
-                throw new Exception('Wrong object/action pair');
-        if( Domstor_Helper::isCommerceType($object) ) {
+    public function create($object, $action, array $params) {
+        if (!Domstor_Helper::checkEstateAction($object, $action)) {
+            throw new Exception('Wrong object/action pair');
+        }
+            
+        if (Domstor_Helper::isCommerceType($object)) {
             $object = 'commerce';
         }
-		$class = sprintf('Domstor_List_%s_%s', ucfirst($object), ucfirst($action));
-		$list = new $class($params);
-		return $list;
-	}
+        
+        $class = sprintf('Domstor_List_%s_%s', ucfirst($object), ucfirst($action));
+        $list = new $class($params);
+        
+        return $list;
+    }
+
 }
