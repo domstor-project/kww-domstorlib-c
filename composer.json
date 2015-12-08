@@ -13,8 +13,8 @@
         "psr-0": {
             "SP_": "lib/",
             "Doctrine_": "lib/",
-            "Domstor_": "lib/",
-            "files": ["lib/htmllib.php", "lib/Domstor/Filter/builders.php"]
-        }
+            "Domstor_": "lib/"
+        },
+        "files": ["lib/htmllib.php", "lib/Domstor/Filter/builders.php"]
     }
 }
