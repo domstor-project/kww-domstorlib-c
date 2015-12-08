@@ -1,5 +1,5 @@
 {
-    "name": "stepanets/kww-domstorlib",
+    "name": "stepanets/kww-domstorlib-c",
     "authors": [
         {
             "name": "Pavel Stepanets",
@@ -13,9 +13,8 @@
         "psr-0": {
             "SP_": "lib/",
             "Doctrine_": "lib/",
-            "Domstor_": "lib/"
-            ,
-            "files": ["lib/domstorlib.php", "lib/htmllib.php"]
+            "Domstor_": "lib/",
+            "files": ["lib/htmllib.php", "lib/Domstor/Filter/builders.php"]
         }
     }
 }
