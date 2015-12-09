@@ -10,6 +10,7 @@ class SP_Form_Field_CheckboxSet extends SP_Form_AbstractField {
     protected $_options = array();
     protected $_separator = ' ';
     protected $_label_first = FALSE;
+    protected $_option_outer_html = '<div class="domstor_checkbox_group">%s</div>';
 
     public function setOptions(array $options) {
         $this->_options = $options;
@@ -24,6 +25,10 @@ class SP_Form_Field_CheckboxSet extends SP_Form_AbstractField {
         $this->_separator = (string) $separator;
         return $this;
     }
+    
+    public function setOptionOuterHtml($param) {
+        
+    }
 
     public function setLabelFirst($val) {
         $this->_label_first = (bool) $val;
@@ -37,14 +42,19 @@ class SP_Form_Field_CheckboxSet extends SP_Form_AbstractField {
 
         foreach ($this->_options as $key => $option) {
             if ($this->_label_first) {
-                $out.= $this->renderCheckboxLabel($key, $option);
-                $out.= $this->renderCheckboxField($key, $option);
-                $out.= $this->_separator . PHP_EOL;
+                $option = $this->renderCheckboxLabel($key, $option) .
+                    $this->renderCheckboxField($key, $option);
             } else {
-                $out.= $this->renderCheckboxField($key, $option);
-                $out.= $this->renderCheckboxLabel($key, $option);
-                $out.= $this->_separator . PHP_EOL;
+                $option = $this->renderCheckboxField($key, $option) .
+                    $this->renderCheckboxLabel($key, $option);
+                
             }
+            
+            if( $this->_option_outer_html ) {
+                $option = sprintf($this->_option_outer_html, $option);
+            }
+            
+            $out .=  $option . $this->_separator . PHP_EOL;
         }
 
         return $out;
