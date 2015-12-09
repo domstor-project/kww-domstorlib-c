@@ -28,6 +28,14 @@ class Domstor_Domstor
     protected $params = array(); // Параметры списка (фильтры, сортировка  и т.д.)
     protected $my_id = 1; // Идентификатор организации
     protected $pagination_count = 15; // Количество ссылок на страницы
+    protected $href_placeholders = array(
+        'object' => '%object',
+        'action' => '%action',
+        'id' => '%id',
+        'page' => '%page',
+        'sort' => '%sort',
+        'filter' => '%filter',
+    );
     protected $href_tmpls = array(
         'list' => '?object=%object&action=%action&page=%page%sort%filter',
         'object' => '?object=%object&action=%action&id=%id%sort%filter',
@@ -233,6 +241,7 @@ class Domstor_Domstor
         $list_params['in_region'] = $this->_isInRegion();
         $list_params['server_name'] = $this->server_name;
         $list_params['object_href'] = $this->_processObjectHref($params);
+        $list_params['id_placeholder'] = $this->getHrefPlaceholder('id');
         $list_params['action'] = $params['action'];
         $list_params['empty_list_message'] = $this->empty_list_message;
         $list_params['sort'] = array(
@@ -671,12 +680,29 @@ class Domstor_Domstor
     }
 
     public function setHrefTemplate($name, $value) {
+        if (!array_key_exists($name, $this->href_tmpls)) {
+            throw new Exception(sprintf('Unavailable template "%s", available templates are: %s',
+                $name, implode(', ', array_keys($this->href_tmpls))));
+        }
         $this->href_tmpls[$name] = $value;
         return $this;
     }
 
     public function getHrefTemplate($name) {
         return $this->href_tmpls[$name];
+    }
+    
+    public function setHrefPlaceholder($name, $value) {
+        if (!array_key_exists($name, $this->href_placeholders)) {
+            throw new Exception(sprintf('Unavailable placeholder "%s", available placeholders are: %s',
+                $name, implode(', ', array_keys($this->href_placeholders))));
+        }
+        $this->href_placeholders[$name] = $value;
+        return $this;
+    }
+    
+    public function getHrefPlaceholder($name) {
+        return $this->href_placeholders[$name];
     }
 
     public function setEmptyListMessage($value) {

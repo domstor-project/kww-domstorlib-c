@@ -28,6 +28,18 @@ class Domstor_Builder
             }
         }
         
+        if (isset($o['href_templates'])) {
+            foreach ($o['href_templates'] as $name => $value) {
+                $domstor->setHrefTemplate($name, $value);
+            }
+        }
+        
+        if (isset($o['href_placeholders'])) {
+            foreach ($o['href_placeholders'] as $name => $value) {
+                $domstor->setHrefPlaceholder($name, $value);
+            }
+        }
+        
         return $domstor;
     }
     

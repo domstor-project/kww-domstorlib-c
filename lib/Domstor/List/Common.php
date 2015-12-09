@@ -1,7 +1,6 @@
 <?php
 
 /**
- * Description of Common
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
@@ -12,6 +11,7 @@ class Domstor_List_Common extends HtmlTable {
     protected $action;
     protected $pagination;
     protected $object_href;
+    protected $id_placeholder;
     protected $filter;
     protected $_show_filter = FALSE;
     protected $empty_list_message = 'Список пуст';
@@ -33,6 +33,10 @@ class Domstor_List_Common extends HtmlTable {
 
     public function getObjectHref() {
         return $this->object_href;
+    }
+    
+    public function getIdPlaceholder($param) {
+        return $this->id_placeholder;
     }
 
     public function inRegion($val) {
@@ -120,6 +124,7 @@ class Domstor_List_Common extends HtmlTable {
             'css_class' => 'domstor_code',
             'position' => 0,
             'object_href' => $this->object_href,
+            'id_placeholder' => $this->id_placeholder,
             'sort_name' => 'sort-code',
         ));
 
@@ -149,7 +154,6 @@ class Domstor_List_Common extends HtmlTable {
 
         $this->addField($code_field)
             ->addField($type_field)
-            //->addField($district_field)
             ->addField($contact_field)
             ->addField($note_web_field)
         ;

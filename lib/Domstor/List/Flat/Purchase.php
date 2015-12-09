@@ -3,7 +3,7 @@
 /**
  * Description of Purchase
  *
- * @author pahhan
+ * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
 class Domstor_List_Flat_Purchase extends Domstor_List_Demand
 {
