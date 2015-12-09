@@ -12,11 +12,14 @@ class Domstor_Detail_DetailFactory {
      * @param string $object
      * @param string $action
      * @param array $params
-     * @return boolean|Domstor_Detail_Supply
+     * @return Domstor_Detail_Common
+     * @throws Exception
      */
-    public function create($object, $action, array $params) {
-        if (!Domstor_Helper::checkEstateAction($object, $action))
-            return FALSE;
+    public function create($object, $action, array $params)
+    {
+        if (!Domstor_Helper::checkEstateAction($object, $action)) {
+            throw new Exception('Wrong object/action pair');
+        }
 
         $offer = ($action == 'purchase' or $action == 'rentuse') ? 'Demand' : 'Supply';
 

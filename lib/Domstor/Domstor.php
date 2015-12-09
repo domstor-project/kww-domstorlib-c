@@ -260,6 +260,7 @@ class Domstor_Domstor
         $object_params['in_region'] = $this->_isInRegion();
         $object_params['server_name'] = $this->server_name;
         $object_params['object_href'] = $this->_processObjectHref($params);
+        $object_params['id_placeholder'] = $this->getHrefPlaceholder('id');
         $object_params['_action'] = $params['action'];
         $object_params['action'] = ($params['action'] == 'rent' or $params['action'] == 'rentuse') ? 'rent' : 'sale';
         $object_params['exchange_flat_href'] = $this->getHrefTEmplate('flat_purchase');

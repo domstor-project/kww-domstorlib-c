@@ -14,6 +14,7 @@ abstract class Domstor_Detail_Common {
     protected $exchange_flat_href;
     protected $exchange_house_href;
     protected $commerce_href;
+    protected $id_placeholder;
     protected $server_name;
     protected $show_contact = TRUE;
     protected $_show_agency = TRUE;
@@ -70,12 +71,12 @@ abstract class Domstor_Detail_Common {
         $next_text = '';
 
         if ($prev) {
-            $prev_href = str_replace('%id', $prev, $this->object_href);
+            $prev_href = str_replace($this->id_placeholder, $prev, $this->object_href);
             $prev_text = 'Предыдущ' . $text_end . ' ' . $name;
         }
 
         if ($next) {
-            $next_href = str_replace('%id', $next, $this->object_href);
+            $next_href = str_replace($this->id_placeholder, $next, $this->object_href);
             $next_text = 'Следующ' . $text_end . ' ' . $name;
         }
 

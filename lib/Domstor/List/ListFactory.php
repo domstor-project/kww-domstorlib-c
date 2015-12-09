@@ -14,6 +14,7 @@ class Domstor_List_ListFactory implements Domstor_List_ListFactoryInterface
      * @param string $action
      * @param array $params
      * @return Domstor_List_Common
+     * @throws Exception
      */
     public function create($object, $action, array $params) {
         if (!Domstor_Helper::checkEstateAction($object, $action)) {
