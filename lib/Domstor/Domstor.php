@@ -139,9 +139,9 @@ class Domstor_Domstor
     }
 
     // Собирает url из параметров
-    protected function _getUrlPartsFromRequest($request_array, $keys = array()) {
+    protected function _getUrlPartsFromRequest(&$request_array, $keys = array()) {
         $out = '';
-        $keys = array('ref_city', 'inreg');
+        $keys += array('ref_city', 'inreg');
         foreach ($keys as $key) {
             if (isset($request_array[$key])) {
                 $out.= '&' . $key;
@@ -312,7 +312,7 @@ class Domstor_Domstor
         $href = $this->_replaceFilterHref($href);
         $href = $this->_replaceSortHref($href);
         $href = $href . $this->_getUrlPartsFromRequest($_GET);
-        return $href;
+        return rtrim($href, '?');
     }
 
     // Формирует ссылку на страницу списка
@@ -321,8 +321,7 @@ class Domstor_Domstor
         $href = $this->_replaceFilterHref($href);
         $href = $this->_replaceSortHref($href);
         $href = $href . $this->_getUrlPartsFromRequest($_GET);
-        //$href = str_replace('%page', $params['page'], $href);
-        return $href;
+        return rtrim($href, '?');
     }
 
     // Формирует ссылку на страницы списков других городов
@@ -469,6 +468,42 @@ class Domstor_Domstor
         $cache_time = isset($params['cache']) ? $params['cache'] : NULL;
         $data = $this->_getData($url, $cache_time);
         return $data[0];
+    }
+    
+    public function getAllCounts(array $settings = array(), array $params = array()) {
+        $result = array();
+        $s = array_replace(array(
+            'living' => true,
+            'commerce' => true,
+            'with_empty' => false,
+        ), $settings);
+
+        if ($s['living'])
+        {
+            foreach(Domstor_Helper::getLivingTypes() as $object) {
+                foreach (Domstor_Helper::getActions($object) as $action) {
+                    $c = $this->getCount($object, $action, $params);
+                    if ($c > 0 || $s['with_empty']) {
+                        $result[$object][$action] = $c;
+                    }
+                }
+            }
+        }
+            
+        if ($s['commerce'])
+        {
+            foreach(Domstor_Helper::getCommerceTypes() as $object) {
+                $result[$object] = array();
+                foreach (Domstor_Helper::getActions($object) as $action) {
+                    $c = $this->getCount($object, $action, $params);
+                    if ($c > 0 || $s['with_empty']) {
+                        $result[$object][$action] = $c;
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function generateSiteMap($object, $action, array $params = array()) {
