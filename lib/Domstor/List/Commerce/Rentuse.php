@@ -3,7 +3,7 @@
 /**
  * Description of Rentuse
  *
- * @author pahhan
+ * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
 class Domstor_List_Commerce_Rentuse extends Domstor_List_Commerce_Purchase
 {

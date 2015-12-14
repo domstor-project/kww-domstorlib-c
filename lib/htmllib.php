@@ -108,6 +108,11 @@ class HtmlTable {
         $this->css_class = $value;
         return $this;
     }
+    
+    public function addCssClass($value) {
+        $this->css_class .= ' '.$value;
+        return $this;
+    }
 
     public function showHead($value) {
         $this->show_head = (bool) $value;

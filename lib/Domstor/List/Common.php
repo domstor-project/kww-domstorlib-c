@@ -115,8 +115,11 @@ class Domstor_List_Common extends HtmlTable {
 
     public function __construct($attr) {
         parent::__construct($attr);
-        //print_r($this->data);
+
         $this->css_class = 'domstor_table';
+        if ($this->in_region) {
+            $this->addCssClass('region');
+        }
 
         $code_field = new Domstor_List_Field_Code(array(
             'name' => 'code',
