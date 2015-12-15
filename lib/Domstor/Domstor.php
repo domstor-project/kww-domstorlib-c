@@ -62,6 +62,7 @@ class Domstor_Domstor
      */
     protected $cacheDriver;
     protected $cacheTime = 0;
+    protected $cacheUniqKey = '';
 
     /**
      *
@@ -115,8 +116,6 @@ class Domstor_Domstor
 
         return $this;
     }
-
-    
     
     /**
      *
@@ -352,6 +351,10 @@ class Domstor_Domstor
 
     public function setCacheTime($cache_time) {
         $this->cacheTime = $cache_time;
+    }
+    
+    public function setCacheUniqKey($cacheUniqKey) {
+        $this->cacheUniqKey = $cacheUniqKey;
     }
 
     public function createFilter($object, $action, array $filter_factory_params = array()) {
@@ -696,7 +699,7 @@ class Domstor_Domstor
         if ($this->mainDataProvider === null) {
             $urlReader = $this->cacheDriver === null?
                 new Domstor_UrlReader() :
-                new Domstor_CacheUrlReader(new Domstor_UrlReader(), $this->cacheDriver, $this->cacheTime);
+                new Domstor_CacheUrlReader(new Domstor_UrlReader(), $this->cacheDriver, $this->cacheTime, $this->cacheUniqKey);
             $this->mainDataProvider = new Domstor_StdDataProvider($urlReader);
         }
         

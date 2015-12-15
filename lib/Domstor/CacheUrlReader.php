@@ -25,11 +25,19 @@ class Domstor_CacheUrlReader implements Domstor_UrlReaderInterface
      */
     private $cacheTime;
     
-    public function __construct(Domstor_UrlReaderInterface $urlReader, Doctrine_Cache_Interface $cacheDriver, $cacheTime)
+    /**
+     *
+     * @var string
+     */
+    private $uniqKey;
+
+
+    public function __construct(Domstor_UrlReaderInterface $urlReader, Doctrine_Cache_Interface $cacheDriver, $cacheTime, $uniqKey = '')
     {
         $this->urlReader = $urlReader;
         $this->cacheDriver = $cacheDriver;
         $this->cacheTime = $cacheTime;
+        $this->uniqKey = $uniqKey;
     }
 
     public function read($url)
@@ -49,6 +57,6 @@ class Domstor_CacheUrlReader implements Domstor_UrlReaderInterface
 
     private function generateCacheId($url)
     {
-        return md5($url);
+        return md5($this->uniqKey . $url);
     }
 }

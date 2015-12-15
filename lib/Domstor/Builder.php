@@ -16,9 +16,13 @@ class Domstor_Builder
     {
         $domstor = new Domstor_Domstor($o['org_id'], $o['location_id']);
         if (isset($o['cache'])) {
-            $options = isset($o['cache']['options'])? $o['cache']['options'] : array();
-            $domstor->setCacheDriver($this->buildCacheDriver($o['cache']['type'], $options));
-            $domstor->setCacheTime($o['cache']['time']);
+            $oc = $o['cache'];
+            $options = isset($oc['options'])? $oc['options'] : array();
+            $domstor->setCacheDriver($this->buildCacheDriver($oc['type'], $options));
+            $domstor->setCacheTime($oc['time']);
+            if (isset($oc['uniq_key'])) {
+                $domstor->setCacheUniqKey($oc['uniq_key']);
+            }
         }
         
         if (isset($o['filter'])) {

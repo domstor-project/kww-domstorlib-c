@@ -7,7 +7,14 @@
  */
 abstract class Domstor_Container
 {
+    /**
+     * Instance create once, container returns it every request
+     */
     const TYPE_SHARE = 'share';
+    
+    /**
+     * Instance creates every request
+     */
     const TYPE_NEW = 'new';
     
     private $params = array();
@@ -46,6 +53,8 @@ abstract class Domstor_Container
         }
         
         $this->services[$name] = $options;
+        
+        return $this;
     }
     
     public function getService($name)
