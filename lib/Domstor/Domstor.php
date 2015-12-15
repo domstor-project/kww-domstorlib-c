@@ -22,6 +22,11 @@ class Domstor_Domstor
      * @var SP_Helper_Pager
      */
     protected $pager;
+    
+    /**
+     *
+     * @var Domstor_Filter_Form
+     */
     protected $filter;
     protected $filter_tmpl_dir;
     protected $detail_tmpl_dir;

@@ -93,12 +93,14 @@ class SP_Form_Field_CheckboxSet extends SP_Form_AbstractField {
         $out = '';
         if (is_array($values)) {
             foreach ($values as $key => $value) {
-                $out.= '&' . $this->getFullName() . '[]=' . $value;
+                if (!empty($value)) {
+                    $out.= '&' . $this->getFullName() . '[]=' . $value;
+                }
             }
         }
         return $out;
     }
-
+    
     public function count() {
         return count($this->_options);
     }

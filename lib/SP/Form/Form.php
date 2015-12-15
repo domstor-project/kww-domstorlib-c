@@ -7,6 +7,10 @@
  */
 class SP_Form_Form extends SP_Form_AbstractField implements SP_Form_FormInterface, Iterator, Countable {
 
+    /**
+     *
+     * @var SP_Form_FieldInterface[] 
+     */
     protected $_fields = array();
     protected $_action = '';
     protected $_render_template;
