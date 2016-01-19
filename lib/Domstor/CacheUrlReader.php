@@ -44,10 +44,9 @@ class Domstor_CacheUrlReader implements Domstor_UrlReaderInterface
     {
         $id = $this->generateCacheId($url);
 
-        if( $this->cacheDriver->contains($id) ) {
-            $content = $this->cacheDriver->fetch($id);
-        }
-        else {
+        $content = $this->cacheDriver->fetch($id);
+        
+        if ($content === false) {
             $content = $this->urlReader->read($url);
             $this->cacheDriver->save($id, $content, $this->cacheTime);
         }
