@@ -22,7 +22,7 @@ class Domstor_List_Flat_Exchange extends Domstor_List_Flat_Sale
 		return $out;
 	}
 
-    protected function getRowHtml()
+    protected function getRowHtml($classes = NULL)
     {
         $class = NULL;
         $demand_tr = '';
