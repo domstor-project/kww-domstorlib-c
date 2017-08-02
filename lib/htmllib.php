@@ -341,7 +341,7 @@ class HtmlTableField
             $span = ' rowspan="' . $this->row_span . '"';
         }
         $out = $this->link ? $this->getLink() : $this->getValue();
-        return "<td$css$span>$out</td>\n\r";
+        return "<td$css$span><span>$out</span></td>\n\r";
     }
 
     public function getHeadHtml()
