@@ -27,6 +27,9 @@ class Domstor_Transformer_LinkToObject implements Domstor_Transformer_Interface
 
     public function get($data)
     {
-        return sprintf('<a href="%s">%s</a>', str_replace($this->id_placeholder, $data['id'], $this->href), $this->transformer->get($data));
+        if (isset($data['id']) and ! is_null($data['id'])) {
+            return sprintf('<a href="%s">%s</a>', str_replace($this->id_placeholder, $data['id'], $this->href), $this->transformer->get($data));
+        }
+        return '';
     }    //put your code here
 }
