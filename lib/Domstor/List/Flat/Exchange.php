@@ -39,7 +39,7 @@ class Domstor_List_Flat_Exchange extends Domstor_List_Flat_Sale
     {
         $row = $this->row;
         $out = '';
-        if (!empty($row['FlatDemands'])) {
+        if (isset($row['FlatDemands']) and is_array($row['FlatDemands'])) {
             $demands = $row['FlatDemands'];
             foreach ($demands as $a) {
                 $type=array(4=>'Квартира', 6=>'Дом');
@@ -73,6 +73,26 @@ class Domstor_List_Flat_Exchange extends Domstor_List_Flat_Sale
                 }
 
                 $price=Domstor_Detail_Demand::getPriceFromTo($a['price_full_min'], $a['price_full_max'], $a['price_currency']);
+                if ($price) {
+                    $annotation.=', '.$price;
+                }
+                if ($a['note_addition']) {
+                    $annotation.=', '.$a['note_addition'];
+                }
+                $out.='<p>Заявка: '.$annotation.'</p>';
+            }
+        }
+        
+        if (isset($row['HouseDemands']) and is_array($row['HouseDemands'])) {
+            $demands = $row['HouseDemands'];
+            foreach ($demands as $a) {
+                $href=$this->getExchangeHouseUrl($a['id']);
+                $annotation='<a href="'.$href.'" class="domstor_link">'.$a['code'].'</a> '. 'Дом';
+                if (isset($a['room_count_min']) && is_int($a['room_count_min']) && (int)($a['room_count_min'])>0)
+                {
+                     $annotation.=', '.$a['room_count_min'].' комн.';
+                }
+                $price=Domstor_Detail_Demand::getPriceFromTo($a['price_full_min'], $a['price_full_max'], 'р.');
                 if ($price) {
                     $annotation.=', '.$price;
                 }
