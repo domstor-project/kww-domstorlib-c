@@ -7,7 +7,6 @@
  */
 class Domstor_List_Demand extends Domstor_List_Common
 {
-
     public function __construct($attr)
     {
         parent::__construct($attr);
@@ -31,8 +30,8 @@ class Domstor_List_Demand extends Domstor_List_Common
         ));
         $this->addField($district_field);
 
-        if ($this->action == 'rent')
+        if ($this->action == 'rent') {
             $this->getField('price')->setSortName('sort-rent');
+        }
     }
-
 }

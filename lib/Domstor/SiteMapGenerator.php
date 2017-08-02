@@ -56,7 +56,8 @@ class Domstor_SiteMapGenerator
     protected $_request_url;
     protected $_object_href;
 
-    function __construct($_object_href) {
+    public function __construct($_object_href)
+    {
         $this->_object_href = $_object_href;
     }
 
@@ -64,47 +65,57 @@ class Domstor_SiteMapGenerator
      *
      * @param array $data
      */
-    public function setData(array $data) {
+    public function setData(array $data)
+    {
         $this->_data = $data;
         return $this;
     }
 
-    public function setHost($host) {
+    public function setHost($host)
+    {
         $this->_host = $host;
         return $this;
     }
 
-    public function setXmlWriter($xml_writer) {
+    public function setXmlWriter($xml_writer)
+    {
         $this->_xml_writer = $xml_writer;
         return $this;
     }
 
-    public function getXmlWriter() {
-        if (is_null($this->_xml_writer))
+    public function getXmlWriter()
+    {
+        if (is_null($this->_xml_writer)) {
             $this->_xml_writer = new XMLWriter;
+        }
         return $this->_xml_writer;
     }
 
-    public function setCacheTime($cache_time) {
+    public function setCacheTime($cache_time)
+    {
         $this->_cache_time = $cache_time;
         return $this;
     }
 
-    public function setCacheDriver($cache_driver) {
+    public function setCacheDriver($cache_driver)
+    {
         $this->_cache_driver = $cache_driver;
     }
 
-    public function setPriority($priority) {
+    public function setPriority($priority)
+    {
         $this->_priority = $priority;
         return $this;
     }
 
-    public function setPeriod($period) {
+    public function setPeriod($period)
+    {
         $this->_period = $period;
         return $this;
     }
 
-    public function setRequestUrl($request_url) {
+    public function setRequestUrl($request_url)
+    {
         $this->_request_url = $request_url;
         return $this;
     }
@@ -113,7 +124,8 @@ class Domstor_SiteMapGenerator
      * Returns hashed _request_url for cache key
      * @return string
      */
-    protected function _getCacheKey() {
+    protected function _getCacheKey()
+    {
         return md5($this->_request_url);
     }
 
@@ -124,16 +136,19 @@ class Domstor_SiteMapGenerator
      * @return Doctrine_Cache_Interface
      * @throws InvalidArgumentException
      */
-    public function createCacheDriver($type, array $options) {
-        if ($type === 'file')
+    public function createCacheDriver($type, array $options)
+    {
+        if ($type === 'file') {
             $this->_cache_driver = new SP_Cache_File($options);
-        else
+        } else {
             throw new InvalidArgumentException('Unavailable cache driver type "' . $type . '"');
+        }
 
         return $this->_cache_driver;
     }
 
-    public function generate() {
+    public function generate()
+    {
         $xml_content = $this->_cache_driver->fetch($this->_getCacheKey());
 
         if (!$xml_content) {
@@ -161,7 +176,8 @@ class Domstor_SiteMapGenerator
         echo $xml_content;
     }
 
-    protected function _genereteElement(XMLWriter $xml, &$row, &$url) {
+    protected function _genereteElement(XMLWriter $xml, &$row, &$url)
+    {
         $xml->startElement('url');
         $xml->writeElement('loc', $url);
         $lastmod = isset($row->edit_dt) ? date('Y-m-d', strtotime($row->edit_dt)) : date('Y-m-d');
@@ -170,5 +186,4 @@ class Domstor_SiteMapGenerator
         $xml->writeElement('priority', $this->_priority);
         $xml->endElement();
     }
-
 }

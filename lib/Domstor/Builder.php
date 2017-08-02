@@ -8,7 +8,7 @@
 class Domstor_Builder
 {
     /**
-     * 
+     *
      * @param array $o Build options
      * @return Domstor_Domstor
      */
@@ -48,7 +48,7 @@ class Domstor_Builder
     }
     
     /**
-     * 
+     *
      * @param string $type
      * @param array $options
      * @return Doctrine_Cache_Driver

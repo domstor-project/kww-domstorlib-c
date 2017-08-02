@@ -7,7 +7,6 @@
  */
 class Domstor_Helper
 {
-
     protected static $estate_actions = array(
         'flat' => array('sale', 'rent', 'purchase', 'rentuse', 'exchange', 'new'),
         'house' => array('sale', 'rent', 'purchase', 'rentuse', 'exchange'),
@@ -75,11 +74,13 @@ class Domstor_Helper
         throw new Exception('Unavailable object ' . $object);
     }
     
-    public static function getCommerceTypes() {
+    public static function getCommerceTypes()
+    {
         return self::$commerce_types;
     }
     
-    public static function getLivingTypes() {
+    public static function getLivingTypes()
+    {
         return self::$living_types;
     }
 }

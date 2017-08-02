@@ -5,12 +5,13 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_List_Field_Thumb extends Domstor_List_Field_Common {
-
+class Domstor_List_Field_Thumb extends Domstor_List_Field_Common
+{
     protected $object_href;
     protected $id_placeholder;
 
-    public function getValue() {
+    public function getValue()
+    {
         $a = $this->getTable()->getRow();
         $out = '';
         if (isset($a['thumb']) && $a['thumb']) {
@@ -20,5 +21,4 @@ class Domstor_List_Field_Thumb extends Domstor_List_Field_Common {
         }
         return $out;
     }
-
 }

@@ -5,17 +5,20 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_List_Supply extends Domstor_List_Common {
-
-    public function checkThumb() {
+class Domstor_List_Supply extends Domstor_List_Common
+{
+    public function checkThumb()
+    {
         foreach ($this->data as $a) {
-            if (isset($a['thumb']))
-                return TRUE;
+            if (isset($a['thumb'])) {
+                return true;
+            }
         }
-        return FALSE;
+        return false;
     }
 
-    public function __construct($attr) {
+    public function __construct($attr)
+    {
         parent::__construct($attr);
 
         $thumb_field = new Domstor_List_Field_Thumb(array(
@@ -61,10 +64,11 @@ class Domstor_List_Supply extends Domstor_List_Common {
             ->addField($address_field)
             ->addField($district_field)
         ;
-        if ($this->checkThumb())
+        if ($this->checkThumb()) {
             $this->addField($thumb_field);
-        if ($this->action == 'rent')
+        }
+        if ($this->action == 'rent') {
             $this->getField('price')->setSortName('sort-rent');
+        }
     }
-
 }

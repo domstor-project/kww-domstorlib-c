@@ -14,4 +14,3 @@ class Domstor_Transformer_Supply_CityDistrict implements Domstor_Transformer_Int
             $data['district'];
     }
 }
-

@@ -12,4 +12,3 @@ class Domstor_Transformer_Supply_RegionDistrict implements Domstor_Transformer_I
         return empty($data['city_id'])? (empty($data['subregion'])? '' : $data['subregion']) : $data['location_name'];
     }
 }
-

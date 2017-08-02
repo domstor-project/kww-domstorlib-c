@@ -22,11 +22,16 @@ class SP_Cache_File extends Doctrine_Cache_Driver
      */
     public function __construct($options = array())
     {
-
-        if ( !isset($options['directory']) ) throw new Doctrine_Cache_Exception('Directory not defined');
+        if (!isset($options['directory'])) {
+            throw new Doctrine_Cache_Exception('Directory not defined');
+        }
         $options['directory'] = realpath($options['directory']);
-        if ( !is_dir($options['directory']) ) throw new Doctrine_Cache_Exception($options['directory'].' is not a directory');
-        if ( !is_writable($options['directory']) ) throw new Doctrine_Cache_Exception($options['directory'].' directory is not writable');
+        if (!is_dir($options['directory'])) {
+            throw new Doctrine_Cache_Exception($options['directory'].' is not a directory');
+        }
+        if (!is_writable($options['directory'])) {
+            throw new Doctrine_Cache_Exception($options['directory'].' directory is not writable');
+        }
 
         $this->_options['directory'] = rtrim($options['directory'], '/').'/';
     }
@@ -54,8 +59,7 @@ class SP_Cache_File extends Doctrine_Cache_Driver
     protected function _parseExpireArray(array $array)
     {
         $out = array();
-        foreach($array as $row)
-        {
+        foreach ($array as $row) {
             $row_array = explode('|', $row);
             $out[$row_array[0]] = rtrim($row_array[1], PHP_EOL);
         }
@@ -65,8 +69,7 @@ class SP_Cache_File extends Doctrine_Cache_Driver
     protected function _writeExpireArray(array $array)
     {
         $handle = fopen($this->getExpireFile(), 'w');
-        foreach($array as $key => $value)
-        {
+        foreach ($array as $key => $value) {
             fwrite($handle, $key.'|'.$value.PHP_EOL);
         }
         fclose($handle);
@@ -74,17 +77,17 @@ class SP_Cache_File extends Doctrine_Cache_Driver
 
     public function getExpireArray($force = false)
     {
-        if( is_null($this->_expire_array) || $force )
-        {
+        if (is_null($this->_expire_array) || $force) {
             $file = $this->getExpireFile();
-            if( !file_exists($file) )
-            {
+            if (!file_exists($file)) {
                 $handle = fopen($file, 'x+');
                 fwrite($handle, '');
                 fclose($handle);
             }
             $array = file($this->getDirectory().$this->_expire_file_name, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            if( !is_array($array) ) return false;
+            if (!is_array($array)) {
+                return false;
+            }
             $this->_expire_array = $this->_parseExpireArray($array);
         }
 
@@ -95,7 +98,9 @@ class SP_Cache_File extends Doctrine_Cache_Driver
     {
         $key = $this->_encodeId($id);
 
-        if( !($this->getExpireArray($force) and isset($this->_expire_array[$key])) ) return false;
+        if (!($this->getExpireArray($force) and isset($this->_expire_array[$key]))) {
+            return false;
+        }
 
         return $this->_expire_array[$key];
     }
@@ -105,10 +110,11 @@ class SP_Cache_File extends Doctrine_Cache_Driver
         $this->getExpireArray();
         $key = $this->_encodeId($id);
 
-        if( $time )
+        if ($time) {
             $this->_expire_array[$key] = $time;
-        else
+        } else {
             $this->_expire_array[$key] = 'null';
+        }
 
         $this->_writeExpireArray($this->_expire_array);
     }
@@ -133,21 +139,22 @@ class SP_Cache_File extends Doctrine_Cache_Driver
      */
     protected function _doFetch($id, $testCacheValidity = true)
     {
-        if( !$this->_doContains($id) ) return false;
+        if (!$this->_doContains($id)) {
+            return false;
+        }
 
-        if ($testCacheValidity)
-        {
+        if ($testCacheValidity) {
             $expire = $this->getExpire($id);
-            if( $expire and $expire !== 'null' )
-            {
-                if( $expire < time() ) return false;
+            if ($expire and $expire !== 'null') {
+                if ($expire < time()) {
+                    return false;
+                }
             }
         }
 
         $content = file_get_contents($this->getFile($id));
 
         return unserialize($this->_hex2bin($content));
-
     }
 
     /**
@@ -163,18 +170,20 @@ class SP_Cache_File extends Doctrine_Cache_Driver
     {
         $file = $this->getFile($id);
 
-        if( is_file($file) )
-        {
-            if( !is_writable($file) ) throw new Doctrine_Cache_Exception('Can not overwrite cache file '.$file);
+        if (is_file($file)) {
+            if (!is_writable($file)) {
+                throw new Doctrine_Cache_Exception('Can not overwrite cache file '.$file);
+            }
         }
 
         $handle = fopen($this->getFile($id), 'w');
         fwrite($handle, bin2hex(serialize($data)));
 
-        if( $lifeTime )
+        if ($lifeTime) {
             $this->setExpire($id, time() + $lifeTime);
-        else
+        } else {
             $this->setExpire($id, false);
+        }
 
 
         true;
@@ -189,15 +198,15 @@ class SP_Cache_File extends Doctrine_Cache_Driver
      */
     protected function _doDelete($id)
     {
-
         $file = $this->getFile($id);
-        if( is_writable($file) ) unlink($file);
+        if (is_writable($file)) {
+            unlink($file);
+        }
 
 
         $this->getExpireArray();
         $key = $this->_encodeId($id);
-        if( isset($this->_expire_array[$key]) )
-        {
+        if (isset($this->_expire_array[$key])) {
             unset($this->_expire_array[$key]);
             $this->_writeExpireArray($this->_expire_array);
         }
@@ -212,11 +221,11 @@ class SP_Cache_File extends Doctrine_Cache_Driver
      */
     protected function _hex2bin($hex)
     {
-        if ( ! is_string($hex)) {
+        if (! is_string($hex)) {
             return null;
         }
 
-        if ( ! ctype_xdigit($hex)) {
+        if (! ctype_xdigit($hex)) {
             return $hex;
         }
 
@@ -233,8 +242,7 @@ class SP_Cache_File extends Doctrine_Cache_Driver
         $keys = array();
         $this->getExpireArray(true);
 
-        foreach( $this->_expire_array as $key => $v)
-        {
+        foreach ($this->_expire_array as $key => $v) {
             $keys[] = $this->_decodeId($key);
         }
         return $keys;

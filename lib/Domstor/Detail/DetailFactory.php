@@ -5,7 +5,8 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_Detail_DetailFactory {
+class Domstor_Detail_DetailFactory
+{
 
     /**
      *
@@ -32,13 +33,13 @@ class Domstor_Detail_DetailFactory {
             'other',
             'complex',
         );
-        if (in_array($object, $commerce))
+        if (in_array($object, $commerce)) {
             $object = 'Commerce';
+        }
 
         $class = sprintf('Domstor_Detail_%s_%s', $offer, ucfirst($object));
 
         $obj = new $class($params);
         return $obj;
     }
-
 }

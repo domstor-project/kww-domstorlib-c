@@ -32,4 +32,3 @@ class Domstor_JsonException extends Exception
         parent::__construct($message, $code);
     }
 }
-

@@ -1,7 +1,7 @@
 <?php
 
-class HtmlTable {
-
+class HtmlTable
+{
     protected $fields = array();
     protected $data = array();
     protected $show_head = true;
@@ -9,21 +9,25 @@ class HtmlTable {
     protected $row;
     protected $sort;
 
-    public function __construct($attr = array()) {
+    public function __construct($attr = array())
+    {
         $this->init($attr);
     }
 
-    public function init(array $attr) {
+    public function init(array $attr)
+    {
         foreach ($attr as $key => $value) {
             $this->$key = $value;
         }
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getHtml();
     }
 
-    private function sortFields() {
+    private function sortFields()
+    {
         foreach ($this->fields as $name => $field) {
             $sort[$name] = $field->getPosition();
         }
@@ -34,7 +38,8 @@ class HtmlTable {
         $this->fields = $new_fields;
     }
 
-    public function addField($field, $title = null, $css_class = null) {
+    public function addField($field, $title = null, $css_class = null)
+    {
         if (is_object($field)) {
             $field->setTable($this);
             $this->fields[$field->name] = $field;
@@ -47,17 +52,20 @@ class HtmlTable {
         return $this;
     }
 
-    public function setFields($fields) {
+    public function setFields($fields)
+    {
         $this->fields = $fields;
         return $this;
     }
 
-    public function addFields($fields) {
+    public function addFields($fields)
+    {
         $this->fields = array_merge($this->fields, $fields);
         return $this;
     }
 
-    public function deleteField($name) {
+    public function deleteField($name)
+    {
         unset($this->fields[$name]);
         return $this;
     }
@@ -67,59 +75,71 @@ class HtmlTable {
      * @param string $name
      * @return HtmlTableField
      */
-    public function getField($name) {
+    public function getField($name)
+    {
         return $this->fields[$name];
     }
 
-    public function dumpFields() {
+    public function dumpFields()
+    {
         foreach ($this->fields as $name => $field) {
             printf("%s\t%s\n", $name, $field->getPosition());
         }
     }
 
-    public function getFieldsCount() {
+    public function getFieldsCount()
+    {
         return count($this->fields);
     }
 
-    public function setFieldTitle($name, $value) {
+    public function setFieldTitle($name, $value)
+    {
         $this->getField($name)->setTitle($value);
         return $this;
     }
 
-    public function setFieldPosition($name, $value) {
+    public function setFieldPosition($name, $value)
+    {
         $this->getField($name)->setPosition($value);
         return $this;
     }
 
-    public function setFieldCssClass($name, $value) {
+    public function setFieldCssClass($name, $value)
+    {
         $this->getField($name)->setCssClass($value);
         return $this;
     }
 
-    public function getRow() {
+    public function getRow()
+    {
         return $this->row;
     }
 
-    public function getSort() {
+    public function getSort()
+    {
         return $this->sort;
     }
 
-    public function setCssClass($value) {
+    public function setCssClass($value)
+    {
         $this->css_class = $value;
         return $this;
     }
     
-    public function addCssClass($value) {
+    public function addCssClass($value)
+    {
         $this->css_class .= ' '.$value;
         return $this;
     }
 
-    public function showHead($value) {
+    public function showHead($value)
+    {
         $this->show_head = (bool) $value;
         return $this;
     }
 
-    public function setData($value) {
+    public function setData($value)
+    {
         if (is_array($value)) {
             $this->data = $value;
             return $this;
@@ -128,11 +148,13 @@ class HtmlTable {
         }
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
 
-    protected function getRowHtml($classes = NULL) {
+    protected function getRowHtml($classes = null)
+    {
         $out = $classes ? '<tr class="' . $classes . '">' : '<tr>';
         foreach ($this->fields as $name => $field) {
             if (array_key_exists($name, $this->row)) {
@@ -144,12 +166,14 @@ class HtmlTable {
         return $out;
     }
 
-    public function getHtml() {
+    public function getHtml()
+    {
         $this->sortFields();
         $out = '';
         if (is_array($this->data) and ! empty($this->fields)) {
-            if (!empty($this->css_class))
+            if (!empty($this->css_class)) {
                 $css = ' class="' . $this->css_class . '"';
+            }
             $out.="<table$css>";
             if ($this->show_head) {
                 $out.='<thead><tr>';
@@ -167,14 +191,13 @@ class HtmlTable {
         }
         return $out;
     }
-
 }
 
-class HtmlTableField {
-
-    var $name;
-    var $title;
-    var $css_class;
+class HtmlTableField
+{
+    public $name;
+    public $title;
+    public $css_class;
     protected $value;
     protected $table;
     protected $row;
@@ -184,10 +207,11 @@ class HtmlTableField {
     protected $position = 0;
     protected $dont_show_if;
     protected $sort_name;
-    var $row_span;
-    var $col_span;
+    public $row_span;
+    public $col_span;
 
-    public function __construct($attr = null) {
+    public function __construct($attr = null)
+    {
         if (is_array($attr)) {
             foreach ($attr as $key => $value) {
                 $this->$key = $value;
@@ -195,63 +219,78 @@ class HtmlTableField {
         }
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->getTable()->getData();
     }
 
-    public function dontShowIf($value) {
+    public function dontShowIf($value)
+    {
         $this->dont_show_if = $value;
     }
 
-    public function setSortName($value) {
+    public function setSortName($value)
+    {
         $this->sort_name = $value;
     }
 
-    public function removeSortName() {
+    public function removeSortName()
+    {
         $this->sort_name = null;
     }
 
-    public function setTable($value) {
+    public function setTable($value)
+    {
         $this->table = $value;
     }
 
-    public function getTable() {
+    public function getTable()
+    {
         return $this->table;
     }
 
-    public function setTitle($value) {
+    public function setTitle($value)
+    {
         $this->title = $value;
     }
 
-    public function setCssClass($value) {
+    public function setCssClass($value)
+    {
         $this->css_class = $value;
     }
 
-    public function setPosition($value) {
+    public function setPosition($value)
+    {
         $this->position = $value;
     }
 
-    public function hasPosition() {
+    public function hasPosition()
+    {
         return $this->position !== false;
     }
 
-    public function getPosition() {
+    public function getPosition()
+    {
         return $this->position;
     }
 
-    public function setRow($value) {
+    public function setRow($value)
+    {
         $this->row = $value;
     }
 
-    public function getRow() {
+    public function getRow()
+    {
         return $this->getTable()->getRow();
     }
 
-    public function setValue($value) {
+    public function setValue($value)
+    {
         $this->value = $value;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         if ($this->dont_show_if !== $this->value) {
             $adds = '';
             if ($this->adds) {
@@ -264,45 +303,55 @@ class HtmlTableField {
         }
     }
 
-    public function setName($value) {
+    public function setName($value)
+    {
         $this->name = $value;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getLink() {
-        if (!empty($this->link['css_class']))
+    public function getLink()
+    {
+        if (!empty($this->link['css_class'])) {
             $css = ' class="' . $this->link['css_class'] . '"';
-        if ($this->getValue())
+        }
+        if ($this->getValue()) {
             return '<a' . $css . ' href="' . $this->link['href'] . '">' . $this->getValue() . '</a>';
+        }
     }
 
-    public function compileCssClass() {
+    public function compileCssClass()
+    {
         $css = (array) $this->css_class;
         return implode(' ', $css);
     }
 
-    public function getHtml() {
+    public function getHtml()
+    {
         $css = '';
         $span = '';
         $css_class = $this->compileCssClass();
-        if (!empty($css_class))
+        if (!empty($css_class)) {
             $css = ' class="' . $css_class . '"';
-        if (!empty($this->row_span))
+        }
+        if (!empty($this->row_span)) {
             $span = ' rowspan="' . $this->row_span . '"';
+        }
         $out = $this->link ? $this->getLink() : $this->getValue();
         return "<td$css$span>$out</td>\n\r";
     }
 
-    public function getHeadHtml() {
+    public function getHeadHtml()
+    {
         $css = '';
-        if (!empty($this->css_class))
+        if (!empty($this->css_class)) {
             $css = ' class="' . $this->css_class . '_head"';
+        }
 
         if ($this->sort_name) {
-
             $sort = $this->getTable()->getSort();
 
             if (isset($sort['input'][$this->sort_name])) {
@@ -328,11 +377,10 @@ class HtmlTableField {
         }
         return '<td' . $css . '>' . $td_content . '</td>';
     }
-
 }
 
-class HtmlMinMaxTableField extends HtmlTableField {
-
+class HtmlMinMaxTableField extends HtmlTableField
+{
     protected $min;
     protected $max;
     protected $min_value;
@@ -343,18 +391,21 @@ class HtmlMinMaxTableField extends HtmlTableField {
     protected $if_equal_show_one = true;
     protected $if_one_without_fromto = false;
 
-    public function getValue() {
+    public function getValue()
+    {
         $row = $this->table->getRow();
         $out = '';
-        if (isset($this->min))
+        if (isset($this->min)) {
             $this->min_value = $row[$this->min];
-        if (isset($this->max))
-            $this->max_value = $row[$this->max];
-        if ($this->if_equal_show_one and $this->min_value == $this->max_value) {
-            if ($this->dont_show_if !== $this->min_value)
-                $out = $this->min_value;
         }
-        else {
+        if (isset($this->max)) {
+            $this->max_value = $row[$this->max];
+        }
+        if ($this->if_equal_show_one and $this->min_value == $this->max_value) {
+            if ($this->dont_show_if !== $this->min_value) {
+                $out = $this->min_value;
+            }
+        } else {
             if (isset($this->min_value) and $this->dont_show_if !== $this->min_value) {
                 $out.=$this->from . ' ' . $this->min_value;
                 $space = ' ';
@@ -368,15 +419,15 @@ class HtmlMinMaxTableField extends HtmlTableField {
                 $out = $this->min_value;
             }
         }
-        if ($out and $this->adds)
+        if ($out and $this->adds) {
             $out.=$this->adds;
+        }
         return $out;
     }
-
 }
 
-class HtmlYesNoTableField extends HtmlTableField {
-
+class HtmlYesNoTableField extends HtmlTableField
+{
     protected $yes;
     protected $no;
     protected $row_yes;
@@ -385,15 +436,17 @@ class HtmlYesNoTableField extends HtmlTableField {
     protected $isset;
     protected $myself;
 
-    public function getValue() {
+    public function getValue()
+    {
         $row = $this->table->getRow();
         $value = $this->row_condition ? $row[$this->row_condition] : $this->value;
         $yes = $this->row_yes ? $row[$this->row_yes] : $this->yes;
         $no = $this->row_no ? $row[$this->row_no] : $this->no;
         //var_dump($this);
         if ($this->isset) {
-            if (!isset($value))
+            if (!isset($value)) {
                 return;
+            }
         }
 
         if ($value) {
@@ -402,47 +455,51 @@ class HtmlYesNoTableField extends HtmlTableField {
             return $no;
         }
     }
-
 }
 
-class HtmlLinkedTableField extends HtmlTableField {
-
+class HtmlLinkedTableField extends HtmlTableField
+{
     protected $params;
     protected $datas;
 
-    public function getLink() {
-        if (!is_array($this->params))
+    public function getLink()
+    {
+        if (!is_array($this->params)) {
             $this->params = array($this->params);
-        if (!is_array($this->datas))
+        }
+        if (!is_array($this->datas)) {
             $this->datas = array($this->datas);
+        }
         $row = $this->table->getRow();
         foreach ($this->datas as $name) {
             $datas[] = $row[$name];
         }
         $href = str_replace($this->params, $datas, $this->link['href']);
-        if (!empty($this->link['css_class']))
+        if (!empty($this->link['css_class'])) {
             $css = ' class="' . $this->link['css_class'] . '"';
+        }
         return '<a' . $css . ' href="' . $href . '">' . $this->getValue() . '</a>';
     }
-
 }
 
-class HtmlDelimitedTableField extends HtmlTableField {
-
+class HtmlDelimitedTableField extends HtmlTableField
+{
     protected $params;
     protected $delimiter;
 
-    public function getValue() {
+    public function getValue()
+    {
         $out = '';
-        if (!is_array($this->params))
+        if (!is_array($this->params)) {
             $this->params = array($this->params);
+        }
         $row = $this->table->getRow();
         foreach ($this->params as $param) {
-            if ($row[$param] !== $this->dont_show_if)
+            if ($row[$param] !== $this->dont_show_if) {
                 $out.= $row[$param] . $this->delimiter;
+            }
         }
         $out = substr($out, 0, -1 * mb_strlen($this->delimiter));
         return $out;
     }
-
 }

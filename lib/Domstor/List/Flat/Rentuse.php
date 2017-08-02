@@ -7,6 +7,4 @@
  */
 class Domstor_List_Flat_Rentuse extends Domstor_List_Flat_Purchase
 {
-
 }
-

@@ -4,8 +4,8 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-interface SP_Form_FormInterface {
-
+interface SP_Form_FormInterface
+{
     public function addField(SP_Form_FieldInterface $field);
 
     public function addFields(array $fields);

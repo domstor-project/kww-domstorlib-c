@@ -16,7 +16,8 @@ class Domstor_List_ListFactory implements Domstor_List_ListFactoryInterface
      * @return Domstor_List_Common
      * @throws Exception
      */
-    public function create($object, $action, array $params) {
+    public function create($object, $action, array $params)
+    {
         if (!Domstor_Helper::checkEstateAction($object, $action)) {
             throw new Exception('Wrong object/action pair');
         }
@@ -30,5 +31,4 @@ class Domstor_List_ListFactory implements Domstor_List_ListFactoryInterface
         
         return $list;
     }
-
 }

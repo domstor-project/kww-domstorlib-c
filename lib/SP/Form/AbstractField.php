@@ -5,8 +5,8 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
-
+abstract class SP_Form_AbstractField implements SP_Form_FieldInterface
+{
     const METHOD_GET = 100;
     const METHOD_POST = 101;
 
@@ -20,63 +20,76 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
     protected $_classes = array();
     protected $_transformer;
     protected $_empty_value = '';
-    protected $_is_hidden = FALSE;
+    protected $_is_hidden = false;
 
-    public function __construct() {
+    public function __construct()
+    {
         return $this;
     }
 
-    public function isHidden($val = NULL) {
-        if (is_null($val))
+    public function isHidden($val = null)
+    {
+        if (is_null($val)) {
             return $this->_is_hidden;
+        }
         $this->_is_hidden = (bool) $val;
         return $this;
     }
 
-    public function setIsHidden($val) {
+    public function setIsHidden($val)
+    {
         return $this->isHidden($val);
     }
 
-    public function count() {
+    public function count()
+    {
         return 0;
     }
 
-    public function setEmptyValue($value) {
+    public function setEmptyValue($value)
+    {
         $this->_empty_value = $value;
         return $this;
     }
 
-    public function isEmptyValue() {
+    public function isEmptyValue()
+    {
         $empty_vals = (array) $this->_empty_value;
 
         foreach ($empty_vals as $empty) {
-            if ($this->_value === $empty or is_null($this->_value))
-                return TRUE;
+            if ($this->_value === $empty or is_null($this->_value)) {
+                return true;
+            }
         }
 
-        return FALSE;
+        return false;
     }
 
-    public function setName($value) {
+    public function setName($value)
+    {
         $this->_name = $value;
         return $this;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->_name;
     }
 
-    public function setMethod($value) {
+    public function setMethod($value)
+    {
         $this->_method = $value;
         return $this;
     }
 
-    public function getMethod() {
+    public function getMethod()
+    {
         $method = is_null($this->_form) ? $this->_method : $this->_form_->getMethod();
         return $method;
     }
 
-    public function getMethodName() {
+    public function getMethodName()
+    {
         $method = $this->getMethod();
         if ($method == self::METHOD_GET) {
             return 'GET';
@@ -86,16 +99,19 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         throw new Exception('Unknown method');
     }
 
-    public function setLabel($value) {
+    public function setLabel($value)
+    {
         $this->_label = $value;
         return $this;
     }
 
-    public function getLabel() {
+    public function getLabel()
+    {
         return $this->_label;
     }
 
-    public function getFullName() {
+    public function getFullName()
+    {
         if (isset($this->_form)) {
             $name = $this->_form->getFullName() . '[' . $this->getName() . ']';
         } else {
@@ -105,21 +121,25 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         return $name;
     }
 
-    public function getId() {
+    public function getId()
+    {
         $form_name = isset($this->_form) ? $this->_form->getId() . '_' : '';
         return $form_name . $this->getName();
     }
 
-    public function setDefault($value) {
+    public function setDefault($value)
+    {
         $this->_default = $value;
         return $this;
     }
 
-    public function getDefault() {
+    public function getDefault()
+    {
         return $this->_default;
     }
 
-    public function isValuable($value = NULL) {
+    public function isValuable($value = null)
+    {
         if (is_null($value)) {
             return $this->_is_valuable;
         } else {
@@ -128,29 +148,34 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         }
     }
 
-    public function getThisOrTrans() {
-        
+    public function getThisOrTrans()
+    {
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->_value;
     }
 
-    public function getRequestString() {
+    public function getRequestString()
+    {
         return '&' . $this->getFullName() . '=' . $this->getValue();
     }
 
-    public function getServerRequestString() {
+    public function getServerRequestString()
+    {
         return $this->getRequestString();
     }
 
-    public function setTransformer($trans) {
+    public function setTransformer($trans)
+    {
         $trans->setField($this);
         $this->_transformer = $trans;
         return $this;
     }
 
-    public function getTransformedValue() {
+    public function getTransformedValue()
+    {
         $value = $this->getValue();
 
         if (!is_null($this->_transformer)) {
@@ -160,12 +185,14 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         return $value;
     }
 
-    public function setForm(SP_Form_FormInterface $value) {
+    public function setForm(SP_Form_FormInterface $value)
+    {
         $this->_form = $value;
         return $this;
     }
 
-    public function renderLabel() {
+    public function renderLabel()
+    {
         $out = '';
         if ($label = $this->getLabel()) {
             $input_id = $this->getId();
@@ -179,12 +206,14 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         echo $this->renderLabel();
     }*/
 
-    public function display() {
+    public function display()
+    {
         echo $this->render();
         return $this;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         try {
             return $this->render();
         } catch (Exception $e) {
@@ -192,14 +221,17 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         }
     }
 
-    public function bind(array $values) {
+    public function bind(array $values)
+    {
         $name = $this->getName();
-        if (isset($values[$name]))
+        if (isset($values[$name])) {
             $this->_value = $values[$name];
+        }
         return $this;
     }
 
-    public function getRequestArray() {
+    public function getRequestArray()
+    {
         if (is_null($this->_form)) {
             $method = $this->getMethod();
             if ($method == self::METHOD_GET) {
@@ -212,20 +244,24 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
             $array = $this->_form->getRequestArray();
             //var_dump($array);
         }
-        if (is_null($array))
+        if (is_null($array)) {
             $array = array();
+        }
         return $array;
     }
 
-    public function bindFromRequest() {
+    public function bindFromRequest()
+    {
         $array = $this->getRequestArray();
-        if (!is_array($array))
+        if (!is_array($array)) {
             $array = array();
+        }
         $this->bind($array);
         return $this;
     }
 
-    protected function _renderClass() {
+    protected function _renderClass()
+    {
         if (count($this->_classes) > 0) {
             $classes = implode(' ', $this->_classes);
             $out = ' class="' . $classes . '"';
@@ -234,5 +270,4 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface {
         }
         return $out;
     }
-
 }

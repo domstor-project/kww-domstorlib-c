@@ -7,7 +7,7 @@
 interface Domstor_DataProviderInterface
 {
     /**
-     * 
+     *
      * @param string $url
      * @return array
      */

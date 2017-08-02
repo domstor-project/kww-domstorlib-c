@@ -7,7 +7,7 @@
 interface Domstor_UrlReaderInterface
 {
     /**
-     * 
+     *
      * @param string $url
      * @return string Returns content from url
      */

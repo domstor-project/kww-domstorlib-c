@@ -4,8 +4,8 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_List_Common extends HtmlTable {
-
+class Domstor_List_Common extends HtmlTable
+{
     protected $in_region;
     protected $object;
     protected $action;
@@ -13,7 +13,7 @@ class Domstor_List_Common extends HtmlTable {
     protected $object_href;
     protected $id_placeholder;
     protected $filter;
-    protected $_show_filter = FALSE;
+    protected $_show_filter = false;
     protected $empty_list_message = 'Список пуст';
     protected $city_id;
 
@@ -23,43 +23,53 @@ class Domstor_List_Common extends HtmlTable {
      */
     protected $pager;
 
-    public function cityId($val = NULL) {
-        if (is_null($val))
+    public function cityId($val = null)
+    {
+        if (is_null($val)) {
             return $this->city_id;
+        }
 
         $this->city_id = $val;
         return $this;
     }
 
-    public function getObjectHref() {
+    public function getObjectHref()
+    {
         return $this->object_href;
     }
     
-    public function getIdPlaceholder($param) {
+    public function getIdPlaceholder($param)
+    {
         return $this->id_placeholder;
     }
 
-    public function inRegion($val) {
+    public function inRegion($val)
+    {
         $this->in_region = (bool) $val;
     }
 
-    public function isInRegion() {
+    public function isInRegion()
+    {
         return $this->in_region;
     }
 
-    public function getServerName() {
+    public function getServerName()
+    {
         return $this->server_name;
     }
 
-    public function setPagination($value) {
+    public function setPagination($value)
+    {
         $this->pagination = $value;
     }
 
-    public function getPagination() {
+    public function getPagination()
+    {
         return $this->pagination;
     }
 
-    public function setPager(SP_Helper_Pager $pager) {
+    public function setPager(SP_Helper_Pager $pager)
+    {
         $this->pager = $pager;
     }
 
@@ -67,11 +77,13 @@ class Domstor_List_Common extends HtmlTable {
      *
      * @return SP_Helper_Pager
      */
-    public function getPager() {
+    public function getPager()
+    {
         return $this->pager;
     }
 
-    public function setFilter($value) {
+    public function setFilter($value)
+    {
         $this->filter = $value;
     }
 
@@ -79,27 +91,33 @@ class Domstor_List_Common extends HtmlTable {
      *
      * @return Domstor_Filter_Form
      */
-    public function getFilter() {
+    public function getFilter()
+    {
         return $this->filter;
     }
 
-    public function showFilter($val) {
+    public function showFilter($val)
+    {
         $this->_show_filter = (bool) $val;
         return $this;
     }
 
-    public function getEmptyListMessage() {
+    public function getEmptyListMessage()
+    {
         return $this->empty_list_message;
     }
 
-    public function display() {
+    public function display()
+    {
         echo $this->getHtml();
     }
 
-    public function getHtml() {
+    public function getHtml()
+    {
         $out = '';
-        if ($this->_show_filter)
+        if ($this->_show_filter) {
             $out.= (string) $this->getFilter();
+        }
         if (count($this->data)) {
             $out.= parent::getHtml();
             $out.= $this->pager->render();
@@ -109,11 +127,13 @@ class Domstor_List_Common extends HtmlTable {
         return $out;
     }
 
-    public function render() {
+    public function render()
+    {
         return parent::getHtml();
     }
 
-    public function __construct($attr) {
+    public function __construct($attr)
+    {
         parent::__construct($attr);
 
         $this->css_class = 'domstor_table';
@@ -161,5 +181,4 @@ class Domstor_List_Common extends HtmlTable {
             ->addField($note_web_field)
         ;
     }
-
 }

@@ -10,7 +10,8 @@ class Domstor_List_Commerce_Purchase extends Domstor_List_Demand
     protected $show_square_house = false;
     protected $show_square_ground = false;
 
-    public function checkSquare() {
+    public function checkSquare()
+    {
         foreach ($this->data as $a) {
             if (isset($a['Purposes'][1009]) and $a['Purposes'][1009]) {
                 if (count($a['Purposes']) == 1) {
@@ -26,7 +27,8 @@ class Domstor_List_Commerce_Purchase extends Domstor_List_Demand
         }
     }
 
-    public function __construct($attr) {
+    public function __construct($attr)
+    {
         parent::__construct($attr);
 
         $this->addCssClass('commerce_'.$this->action);
@@ -66,10 +68,11 @@ class Domstor_List_Commerce_Purchase extends Domstor_List_Demand
         $this->addField($type_field)
             ->addField($price_field)
         ;
-        if ($this->show_square_house)
+        if ($this->show_square_house) {
             $this->addField($square_field);
-        if ($this->show_square_ground)
+        }
+        if ($this->show_square_ground) {
             $this->addField($square_ground_field);
+        }
     }
-
 }

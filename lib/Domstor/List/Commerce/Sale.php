@@ -10,12 +10,13 @@ class Domstor_List_Commerce_Sale extends Domstor_List_Supply
     protected $show_square_house = false;
     protected $show_square_ground = false;
 
-    public function checkSquare() {
-        if (!is_array($this->data))
-            return FALSE;
+    public function checkSquare()
+    {
+        if (!is_array($this->data)) {
+            return false;
+        }
         foreach ($this->data as $a) {
             if (isset($a['Purposes'][1009]) and $a['Purposes'][1009]) {
-
                 if (count($a['Purposes']) == 1) {
                     $this->show_square_ground = true;
                 } else {
@@ -29,7 +30,8 @@ class Domstor_List_Commerce_Sale extends Domstor_List_Supply
         }
     }
 
-    public function __construct($attr) {
+    public function __construct($attr)
+    {
         parent::__construct($attr);
         $this->addCssClass('commerce_'.$this->action);
         $type_field = new Domstor_List_Field_Commerce_Purpose(array(
@@ -76,12 +78,14 @@ class Domstor_List_Commerce_Sale extends Domstor_List_Supply
             ->addField($floor_field)
             ->addField($price_field)
         ;
-        if ($this->show_square_house)
+        if ($this->show_square_house) {
             $this->addField($square_field);
-        if ($this->show_square_ground)
+        }
+        if ($this->show_square_ground) {
             $this->addField($square_ground_field);
-        if ($this->action == 'rent')
+        }
+        if ($this->action == 'rent') {
             $this->getField('price')->setSortName('sort-rent');
+        }
     }
-
 }

@@ -47,7 +47,7 @@
 						<strong><?php $this->displayLabel('district')?></strong>
 						<?php $this->displayField('district')?>
 					</td>
-                    <?php if( $this->hasField('suburban') ): ?>
+                    <?php if ($this->hasField('suburban')): ?>
                     <td class="suburban">
 						<strong><?php $this->displayLabel('suburban')?></strong>
 						<?php $this->displayField('suburban')?>

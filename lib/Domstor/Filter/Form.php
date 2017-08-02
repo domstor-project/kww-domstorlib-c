@@ -4,32 +4,38 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_Filter_Form extends SP_Form_Form {
+class Domstor_Filter_Form extends SP_Form_Form
+{
 
     // Ссылка на строитель форм
     protected $_builder;
     // Ссылка на загрузчик данных
     protected $_data_loader;
 
-    public function setDataLoader(Domstor_Filter_DataLoader $loader) {
+    public function setDataLoader(Domstor_Filter_DataLoader $loader)
+    {
         $this->_data_loader = $loader;
         return $this;
     }
 
-    public function getDataLoader() {
+    public function getDataLoader()
+    {
         return $this->_data_loader;
     }
 
-    public function getBuilder() {
+    public function getBuilder()
+    {
         return $this->_builder;
     }
 
-    public function setBuilder(DomstorCommonBuilder $builder) {
+    public function setBuilder(DomstorCommonBuilder $builder)
+    {
         $this->_builder = $builder;
         return $this;
     }
 
-    public function renderHidden() {
+    public function renderHidden()
+    {
         $get_array = array('object', 'action', 'inreg', 'ref_city');
         $out = '';
         // $out = '<input type="hidden" name="filter" value="" />'.PHP_EOL;
@@ -43,20 +49,22 @@ class Domstor_Filter_Form extends SP_Form_Form {
         return $out;
     }
 
-    public function displayHidden() {
+    public function displayHidden()
+    {
         echo $this->renderHidden();
     }
 
-    public function displayFieldLabel($name, $separator = ' ') {
+    public function displayFieldLabel($name, $separator = ' ')
+    {
         $this->displayField($name);
         echo $separator;
         $this->displayLabel($name);
     }
 
-    public function displayLabelField($name, $separator = ' ') {
+    public function displayLabelField($name, $separator = ' ')
+    {
         $this->displayLabel($name);
         echo $separator;
         $this->displayField($name);
     }
-
 }

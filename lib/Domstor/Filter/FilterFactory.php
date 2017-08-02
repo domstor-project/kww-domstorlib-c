@@ -24,7 +24,7 @@ class Domstor_Filter_FilterFactory implements Domstor_Filter_FilterFactoryInterf
 
         $builder_class = 'Domstor' . ucfirst($object) . ucfirst($action) . 'FilterBuilder';
         if (!class_exists($builder_class)) {
-            return FALSE; //throw new Excepion($builder_class.' not found');
+            return false; //throw new Excepion($builder_class.' not found');
         }
 
         $builder = new $builder_class;
@@ -44,5 +44,4 @@ class Domstor_Filter_FilterFactory implements Domstor_Filter_FilterFactoryInterf
         $filter->setName('f')->setRenderTemplate($template);
         return $filter;
     }
-
 }

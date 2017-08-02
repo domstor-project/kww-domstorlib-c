@@ -71,8 +71,7 @@ abstract class Domstor_Container
         
         if (isset($o['class'])) {
             $inst = $this->buildClass($o);
-        }
-        else {
+        } else {
             $inst = $this->buildFactory($o);
         }
         
@@ -91,17 +90,15 @@ abstract class Domstor_Container
     {
         if ($this->isParam($name)) {
             return $this->getParamExact($this->clearParamName($name));
-        }
-        else if($this->isService($name)) {
+        } elseif ($this->isService($name)) {
             return $this->getService($this->clearServiceName($name));
-        }
-        else {
+        } else {
             return $this->getParam($name);
         }
     }
     
     private function makeCalls($instance, $calls)
-    {        
+    {
         foreach ($calls as $method => $args) {
             $refMethod = new ReflectionMethod($instance, $method);
             $refMethod->invokeArgs($instance, $this->prepareArgs($args));
@@ -138,13 +135,9 @@ abstract class Domstor_Container
         foreach ($args as $arg) {
             if ($this->isParam($arg)) {
                 $out[] = $this->getParamExact($this->clearParamName($arg));
-            }
-            
-            else if ($this->isService($arg)) {
+            } elseif ($this->isService($arg)) {
                 $out[] = $this->getService($this->clearServiceName($arg));
-            }
-            
-            else {
+            } else {
                 $out[] = $arg;
             }
         }
@@ -162,11 +155,13 @@ abstract class Domstor_Container
         return substr($arg, 0, 1) === '%' && substr($arg, -1) === '%';
     }
     
-    private function clearServiceName($arg) {
+    private function clearServiceName($arg)
+    {
         return substr($arg, 1, -1);
     }
     
-    private function clearParamName($arg) {
+    private function clearParamName($arg)
+    {
         return substr($arg, 1, -1);
     }
 }

@@ -1,13 +1,14 @@
 <?php
 
-class DomstorCommonBuilder {
-
+class DomstorCommonBuilder
+{
     protected $_form;
     protected $_domstor;
     protected $_object;
     protected $_action;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_form = new Domstor_Filter_Form;
         $this->_form->setBuilder($this);
         $data_loader = new Domstor_Filter_DataLoader($this->_form);
@@ -19,51 +20,56 @@ class DomstorCommonBuilder {
         $this->_form->addField($code);
     }
 
-    public function setDomstor($val) {
+    public function setDomstor($val)
+    {
         $this->_domstor = $val;
         $this->_form->getDataLoader()->setConfig($this->_domstor->getFilterDataLoaderConfig());
         return $this;
     }
 
-    public function getDomstor() {
+    public function getDomstor()
+    {
         return $this->_domstor;
     }
 
-    public function setObject($val) {
+    public function setObject($val)
+    {
         $this->_object = $val;
         return $this;
     }
 
-    public function getObject() {
+    public function getObject()
+    {
         return $this->_object;
     }
 
-    public function setAction($val) {
+    public function setAction($val)
+    {
         $this->_action = $val;
         return $this;
     }
 
-    public function getAction() {
+    public function getAction()
+    {
         return $this->_action;
     }
-
 }
 
-class DomstorPriceConstructor {
-
-    public static function add($form) {
-        
+class DomstorPriceConstructor
+{
+    public static function add($form)
+    {
         $price_form = new DomstorPriceForm;
         $form->addField($price_form);
 
         return $form;
     }
-
 }
 
-class DomstorRentForm extends Domstor_Filter_Form {
-
-    public function __construct() {
+class DomstorRentForm extends Domstor_Filter_Form
+{
+    public function __construct()
+    {
         $this->setName('rent');
 
         $min = new SP_Form_Field_InputText;
@@ -82,23 +88,26 @@ class DomstorRentForm extends Domstor_Filter_Form {
         ));
     }
 
-    public function getServerRequestString() {
+    public function getServerRequestString()
+    {
         $values = $this->getValue();
         $out = '';
         $coef = (float) $values['period'];
-        if ($values['min'])
+        if ($values['min']) {
             $out.= '&rent_min=' . $values['min'] / $coef;
-        if ($values['max'])
+        }
+        if ($values['max']) {
             $out.= '&rent_max=' . $values['max'] / $coef;
+        }
 
         return $out;
     }
-
 }
 
-class DomstorPriceForm extends Domstor_Filter_Form {
-
-    public function __construct() {
+class DomstorPriceForm extends Domstor_Filter_Form
+{
+    public function __construct()
+    {
         $this->setName('price');
 
         $min = new SP_Form_Field_InputText;
@@ -113,33 +122,36 @@ class DomstorPriceForm extends Domstor_Filter_Form {
         ));
     }
 
-    public function getServerRequestString() {
+    public function getServerRequestString()
+    {
         $values = $this->getValue();
         $out = '';
-        if ($values['min'])
+        if ($values['min']) {
             $out.= '&price_min=' . $values['min'] * 1000;
-        if ($values['max'])
+        }
+        if ($values['max']) {
             $out.= '&price_max=' . $values['max'] * 1000;
+        }
 
         return $out;
     }
-
 }
 
-class DomstorRentLivingConstructor {
-
-    public static function add($form) {
+class DomstorRentLivingConstructor
+{
+    public static function add($form)
+    {
         $rent_form = new DomstorRentForm;
         $rent_form->getField('period')->addOptions(array('0.033' => 'в сутки'));
         $form->addField($rent_form);
         return $form;
     }
-
 }
 
-class DomstorSubmitConstructor {
-
-    public static function add($form) {
+class DomstorSubmitConstructor
+{
+    public static function add($form)
+    {
         $submit_field = new SP_Form_Field_Submit;
         $submit_field->setLabel('Найти');
 
@@ -152,37 +164,36 @@ class DomstorSubmitConstructor {
         ));
         return $form;
     }
-
 }
 
-class DomstorSuburbanConstructor {
-
-    public static function add($form, $domstor) {
+class DomstorSuburbanConstructor
+{
+    public static function add($form, $domstor)
+    {
         $field = new SP_Form_Field_CheckboxList;
         $options = $form->getDataLoader()->getSuburbans();
         $field->setName('suburban')
             ->setLabel('Пригород:')
             ->setOptions($options)
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
         $form->addField($field);
     }
-
 }
 
-class DomstorLocationsConstructor {
-
-    public static function add($form, $domstor) {
+class DomstorLocationsConstructor
+{
+    public static function add($form, $domstor)
+    {
         if ($domstor->inRegion()) { // Если объект в регионе
-            
         }
     }
-
 }
 
-class DomstorDistrictConstructor {
-
-    public static function add($form, $domstor) {
+class DomstorDistrictConstructor
+{
+    public static function add($form, $domstor)
+    {
         if ($domstor->inRegion()) { // Если объект в регионе
             // Районы и мелкие города региона
             $district = new SP_Form_Field_CheckboxList;
@@ -190,7 +201,7 @@ class DomstorDistrictConstructor {
             $district->setName('subregion')
                 ->setLabel('Район / населенный&nbsp;пункт')
                 ->setOptions($options)
-                ->isDropDown(FALSE)
+                ->isDropDown(false)
             ;
         } else {
             // Районы города
@@ -199,19 +210,19 @@ class DomstorDistrictConstructor {
             $district->setName('district')
                 ->setLabel('Район:')
                 ->setOptions($options)
-                ->isDropDown(FALSE)
+                ->isDropDown(false)
             ;
         }
 
         $form->addField($district, 'district');
         return $form;
     }
-
 }
 
-class DomstorRoomCountConstructor {
-
-    public static function add($form) {
+class DomstorRoomCountConstructor
+{
+    public static function add($form)
+    {
         // Число комнат
         $room_count = new SP_Form_Field_CheckboxSet;
         $room_count->setOptions(array(1 => '1', 2 => '2', 3 => '3', 4 => '4', 5 => '5 и более'));
@@ -219,12 +230,12 @@ class DomstorRoomCountConstructor {
         $form->addField($room_count);
         return $form;
     }
-
 }
 
-class DomstorSquareHouseConstructor {
-
-    public static function add($form) {
+class DomstorSquareHouseConstructor
+{
+    public static function add($form)
+    {
         // Площадь помещения
         $square_min_field = new SP_Form_Field_InputText;
         $square_min_field->setName('squareh_min')->setLabel('от');
@@ -238,12 +249,12 @@ class DomstorSquareHouseConstructor {
         ));
         return $form;
     }
-
 }
 
-class DomstorSquareGroundForm extends Domstor_Filter_Form {
-
-    public function __construct() {
+class DomstorSquareGroundForm extends Domstor_Filter_Form
+{
+    public function __construct()
+    {
         $this->setName('squareg');
 
         $min = new SP_Form_Field_InputText;
@@ -262,35 +273,38 @@ class DomstorSquareGroundForm extends Domstor_Filter_Form {
         ));
     }
 
-    public function getServerRequestString() {
+    public function getServerRequestString()
+    {
         $values = $this->getValue();
         $out = '';
         $coef = (float) $values['unit'];
-        if ($values['min'])
+        if ($values['min']) {
             $out.= '&squareg_min=' . $values['min'] * $coef;
-        if ($values['max'])
+        }
+        if ($values['max']) {
             $out.= '&squareg_max=' . $values['max'] * $coef;
+        }
 
         return $out;
     }
-
 }
 
-class DomstorSquareGroundConstructor {
-
-    public static function add($form) {
+class DomstorSquareGroundConstructor
+{
+    public static function add($form)
+    {
         $sq_form = new DomstorSquareGroundForm;
         $form->addField($sq_form);
         return $form;
     }
-
 }
 
 // FLAT
 // 		Sale
-class DomstorFlatSaleFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorFlatSaleFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -344,7 +358,7 @@ class DomstorFlatSaleFilterBuilder extends DomstorCommonBuilder {
         $type->setName('type')
             ->setLabel('Тип квартиры:')
             ->setOptions($options)
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -358,13 +372,13 @@ class DomstorFlatSaleFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rent
-class DomstorFlatRentFilterBuilder extends DomstorFlatSaleFilterBuilder {
-
-    public function buildFilter() {
+class DomstorFlatRentFilterBuilder extends DomstorFlatSaleFilterBuilder
+{
+    public function buildFilter()
+    {
         $filter = parent::buildFilter();
         // Удаление полей не нужных для аренды
         $filter->deleteField('price');
@@ -374,13 +388,13 @@ class DomstorFlatRentFilterBuilder extends DomstorFlatSaleFilterBuilder {
 
         return $filter;
     }
-
 }
 
 // 		Purchase
-class DomstorFlatPurchaseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorFlatPurchaseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -403,7 +417,7 @@ class DomstorFlatPurchaseFilterBuilder extends DomstorCommonBuilder {
         $type->setName('type')
             ->setLabel('Тип квартиры:')
             ->setOptions($options)
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -414,13 +428,13 @@ class DomstorFlatPurchaseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rentuse
-class DomstorFlatRentuseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorFlatRentuseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorRentLivingConstructor::add($this->_form);
 
@@ -443,7 +457,7 @@ class DomstorFlatRentuseFilterBuilder extends DomstorCommonBuilder {
         $type->setName('type')
             ->setLabel('Тип квартиры')
             ->setOptions($options)
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -454,13 +468,13 @@ class DomstorFlatRentuseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Exchange
-class DomstorFlatExchangeFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorFlatExchangeFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -503,7 +517,7 @@ class DomstorFlatExchangeFilterBuilder extends DomstorCommonBuilder {
         $type->setName('type')
             ->setLabel('Тип квартиры')
             ->setOptions($options)
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -516,13 +530,13 @@ class DomstorFlatExchangeFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		New
-class DomstorFlatNewFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorFlatNewFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -558,7 +572,7 @@ class DomstorFlatNewFilterBuilder extends DomstorCommonBuilder {
         $type->setName('type')
             ->setLabel('Тип квартиры')
             ->setOptions($options)
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -570,14 +584,14 @@ class DomstorFlatNewFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // HOUSE
 // 		Sale
-class DomstorHouseSaleFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorHouseSaleFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -605,7 +619,7 @@ class DomstorHouseSaleFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -615,13 +629,13 @@ class DomstorHouseSaleFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rent
-class DomstorHouseRentFilterBuilder extends DomstorHouseSaleFilterBuilder {
-
-    public function buildFilter() {
+class DomstorHouseRentFilterBuilder extends DomstorHouseSaleFilterBuilder
+{
+    public function buildFilter()
+    {
         $filter = parent::buildFilter();
 
         // Удаление полей не нужных для аренды
@@ -631,13 +645,13 @@ class DomstorHouseRentFilterBuilder extends DomstorHouseSaleFilterBuilder {
 
         return $filter;
     }
-
 }
 
 // 		Purchase
-class DomstorHousePurchaseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorHousePurchaseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -661,7 +675,7 @@ class DomstorHousePurchaseFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -671,13 +685,13 @@ class DomstorHousePurchaseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rentuse
-class DomstorHouseRentuseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorHouseRentuseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorRentLivingConstructor::add($this->_form);
 
@@ -698,7 +712,7 @@ class DomstorHouseRentuseFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -708,13 +722,13 @@ class DomstorHouseRentuseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Exchange
-class DomstorHouseExchangeFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorHouseExchangeFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -742,7 +756,7 @@ class DomstorHouseExchangeFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Добавление полей в форму
@@ -752,14 +766,14 @@ class DomstorHouseExchangeFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // GARAGE
 // 		Sale
-class DomstorGarageSaleFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorGarageSaleFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -778,7 +792,7 @@ class DomstorGarageSaleFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Ширина
@@ -812,13 +826,13 @@ class DomstorGarageSaleFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rent
-class DomstorGarageRentFilterBuilder extends DomstorGarageSaleFilterBuilder {
-
-    public function buildFilter() {
+class DomstorGarageRentFilterBuilder extends DomstorGarageSaleFilterBuilder
+{
+    public function buildFilter()
+    {
         $filter = parent::buildFilter();
 
         // Удаление полей не нужных для аренды
@@ -828,13 +842,13 @@ class DomstorGarageRentFilterBuilder extends DomstorGarageSaleFilterBuilder {
 
         return $filter;
     }
-
 }
 
 // 		Purchase
-class DomstorGaragePurchaseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorGaragePurchaseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -849,7 +863,7 @@ class DomstorGaragePurchaseFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Ширина
@@ -883,13 +897,13 @@ class DomstorGaragePurchaseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rentuse
-class DomstorGarageRentuseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorGarageRentuseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorRentLivingConstructor::add($this->_form);
 
@@ -904,7 +918,7 @@ class DomstorGarageRentuseFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Ширина
@@ -938,14 +952,14 @@ class DomstorGarageRentuseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // LAND
 // 		Sale
-class DomstorLandSaleFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorLandSaleFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -964,7 +978,7 @@ class DomstorLandSaleFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Площадь участка
@@ -977,13 +991,13 @@ class DomstorLandSaleFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rent
-class DomstorLandRentFilterBuilder extends DomstorLandSaleFilterBuilder {
-
-    public function buildFilter() {
+class DomstorLandRentFilterBuilder extends DomstorLandSaleFilterBuilder
+{
+    public function buildFilter()
+    {
         $filter = parent::buildFilter();
 
         // Удаление полей не нужных для аренды
@@ -993,13 +1007,13 @@ class DomstorLandRentFilterBuilder extends DomstorLandSaleFilterBuilder {
 
         return $filter;
     }
-
 }
 
 // 		Purchase
-class DomstorLandPurchaseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorLandPurchaseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -1014,7 +1028,7 @@ class DomstorLandPurchaseFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Площадь участка
@@ -1027,13 +1041,13 @@ class DomstorLandPurchaseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // 		Rentuse
-class DomstorLandRentuseFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorLandRentuseFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorRentLivingConstructor::add($this->_form);
 
@@ -1049,7 +1063,7 @@ class DomstorLandRentuseFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Площадь участка
@@ -1062,13 +1076,13 @@ class DomstorLandRentuseFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
 // COMMERCE
-class DomstorCommerceSaleFilterBuilder extends DomstorCommonBuilder {
-
-    public function buildFilter() {
+class DomstorCommerceSaleFilterBuilder extends DomstorCommonBuilder
+{
+    public function buildFilter()
+    {
         // Добавление полей цены объекта
         DomstorPriceConstructor::add($this->_form);
 
@@ -1095,7 +1109,7 @@ class DomstorCommerceSaleFilterBuilder extends DomstorCommonBuilder {
             ->setOptions($options)
             ->setLayoutClass('domstor_filter_dropdown')
             ->setLabelClass('domstor_filter_trigger')
-            ->isDropDown(FALSE)
+            ->isDropDown(false)
         ;
 
         // Площадь участка
@@ -1111,12 +1125,12 @@ class DomstorCommerceSaleFilterBuilder extends DomstorCommonBuilder {
 
         return $this->_form;
     }
-
 }
 
-class DomstorCommerceRentFilterBuilder extends DomstorCommerceSaleFilterBuilder {
-
-    public function buildFilter() {
+class DomstorCommerceRentFilterBuilder extends DomstorCommerceSaleFilterBuilder
+{
+    public function buildFilter()
+    {
         $filter = parent::buildFilter();
 
         // Удаление полей не нужных для аренды
@@ -1128,13 +1142,12 @@ class DomstorCommerceRentFilterBuilder extends DomstorCommerceSaleFilterBuilder 
 
         return $filter;
     }
-
 }
 
-class DomstorCommercePurchaseFilterBuilder extends DomstorCommerceSaleFilterBuilder {
-    
+class DomstorCommercePurchaseFilterBuilder extends DomstorCommerceSaleFilterBuilder
+{
 }
 
-class DomstorCommerceRentuseFilterBuilder extends DomstorCommerceRentFilterBuilder {
-    
+class DomstorCommerceRentuseFilterBuilder extends DomstorCommerceRentFilterBuilder
+{
 }

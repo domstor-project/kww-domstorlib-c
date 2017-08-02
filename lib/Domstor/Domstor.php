@@ -5,7 +5,6 @@
  */
 class Domstor_Domstor
 {
-
     protected $object;
     protected $action;
     protected $server_name = 'domstor.ru';
@@ -13,7 +12,7 @@ class Domstor_Domstor
     
     /**
      *
-     * @var Domstor_SortClient 
+     * @var Domstor_SortClient
      */
     protected $sort_client;
 
@@ -50,7 +49,7 @@ class Domstor_Domstor
         'commerce_sale' => '?object=commerce&action=sale&id=%id',
         'complex_sale' => '?object=complex&action=sale&id=%id',
     ); // Шаблоны ссылок
-    protected $in_region = FALSE; // Флаг определяет отображение некоторых столбцов списка
+    protected $in_region = false; // Флаг определяет отображение некоторых столбцов списка
     protected $empty_list_message = '<p class="domstor_not_found">Объекты с данными параметрами не найдены</p>';
     protected $home_location;
     protected $filter_data_loader_config;
@@ -83,17 +82,18 @@ class Domstor_Domstor
     
     /**
      *
-     * @var Domstor_List_ListFactoryInterface; 
+     * @var Domstor_List_ListFactoryInterface;
      */
     protected $listFactory;
     
     /**
      *
-     * @var Domstor_Filter_FilterFactory; 
+     * @var Domstor_Filter_FilterFactory;
      */
     protected $filterFactory;
 
-    public static function checkObjectAction($object, $action) {
+    public static function checkObjectAction($object, $action)
+    {
         return Domstor_Helper::checkEstateAction($object, $action);
     }
 
@@ -126,38 +126,45 @@ class Domstor_Domstor
      *
      * @return type DomstorSiteMapGenerator
      */
-    public function getSiteMapGenerator() {
-        if (!$this->site_map_generator)
+    public function getSiteMapGenerator()
+    {
+        if (!$this->site_map_generator) {
             $this->site_map_generator = new Domstor_SiteMapGenerator($this->getHrefTemplate('object'));
+        }
 
         return $this->site_map_generator;
     }
 
     // Добавляет элементы из входного массива в массив параметров
-    protected function _addParamsFromRequest($params, $request_array, $keys) {
+    protected function _addParamsFromRequest($params, $request_array, $keys)
+    {
         foreach ($keys as $key => $value) {
-            if (isset($request_array[$key]))
+            if (isset($request_array[$key])) {
                 $params[$value] = $request_array[$key];
+            }
         }
         return $params;
     }
 
     // Собирает url из параметров
-    protected function _getUrlPartsFromRequest(&$request_array, $keys = array()) {
+    protected function _getUrlPartsFromRequest(&$request_array, $keys = array())
+    {
         $out = '';
         $keys += array('ref_city', 'inreg');
         foreach ($keys as $key) {
             if (isset($request_array[$key])) {
                 $out.= '&' . $key;
-                if ($request_array[$key] !== '')
+                if ($request_array[$key] !== '') {
                     $out.= '=' . $request_array[$key];
+                }
             }
         }
         return $out;
     }
 
     // Подготавливаем параметры запроса к серверу
-    protected function _prepareRequestParams(array $params) {
+    protected function _prepareRequestParams(array $params)
+    {
         // Добавляем id организации - обязательный параметр для всех запросов
         $params['aid'] = $this->my_id;
         $params = $this->_addParamsFromRequest($params, $_GET, array('ref_city' => 'ref_city'));
@@ -174,7 +181,8 @@ class Domstor_Domstor
     }
 
     // Формируем url запроса к серверу для списка
-    protected function _getListRequest(array $params) {
+    protected function _getListRequest(array $params)
+    {
         // Получаем массив параметров запроса
         $params = $this->_prepareRequestParams($params);
 
@@ -186,51 +194,59 @@ class Domstor_Domstor
 
         $url = 'http://' . $this->server_name . $this->api_path . '/list/?' . http_build_query($params) . $this->sort_client->getRequestString();
 
-        if ($this->filter)
+        if ($this->filter) {
             $url.= $this->filter->getServerRequestString();
+        }
 
         return $url;
     }
 
     // Формируем url запроса к серверу для списка
-    protected function _getSitemapRequest(array $params) {
+    protected function _getSitemapRequest(array $params)
+    {
         // Получаем массив параметров запроса
         $params = $this->_prepareRequestParams($params);
 
         $url = 'http://' . $this->server_name . $this->api_path . '/site-map/?' . http_build_query($params);
 
-        if ($this->filter)
+        if ($this->filter) {
             $url.= $this->filter->getServerRequestString();
+        }
 
         return $url;
     }
 
     // Формируем url запроса к серверу для количества
-    protected function _getCountRequest(array $params) {
+    protected function _getCountRequest(array $params)
+    {
         // Получаем массив параметров запроса
         $params = $this->_prepareRequestParams($params);
 
         $url = 'http://' . $this->server_name . $this->api_path . '/count/?' . http_build_query($params);
-        if ($this->filter)
+        if ($this->filter) {
             $url.= $this->filter->getServerRequestString();
+        }
 
         return $url;
     }
 
     // Формируем url запроса к серверу для объекта
-    protected function _getObjectRequest(array $params) {
+    protected function _getObjectRequest(array $params)
+    {
         // Получаем массив параметров запроса
         $params = $this->_prepareRequestParams($params);
         $url = 'http://' . $this->server_name . $this->api_path . '/object/?' . http_build_query($params) . $this->sort_client->getRequestString();
-        if ($this->filter)
+        if ($this->filter) {
             $url.= $this->filter->getServerRequestString();
+        }
 
         //echo $url;
         return $url;
     }
 
     // Формируем url запроса к серверу для списка других городов
-    protected function _getLocationsRequest(array $params) {
+    protected function _getLocationsRequest(array $params)
+    {
         // Получаем массив параметров запроса
         $params = $this->_prepareRequestParams($params);
         $this_params = array_merge($params, $this->params);
@@ -240,7 +256,8 @@ class Domstor_Domstor
     }
 
     // Подготавливаем параметры для виджета списка
-    protected function _prepareListParams(array $params) {
+    protected function _prepareListParams(array $params)
+    {
         $list_params = array();
         $list_params['in_region'] = $this->_isInRegion();
         $list_params['server_name'] = $this->server_name;
@@ -259,7 +276,8 @@ class Domstor_Domstor
     }
 
     // Подготавливаем параметры для виджета объекта
-    protected function _prepareObjectParams(array $params) {
+    protected function _prepareObjectParams(array $params)
+    {
         $object_params = array();
         $object_params['in_region'] = $this->_isInRegion();
         $object_params['server_name'] = $this->server_name;
@@ -277,32 +295,36 @@ class Domstor_Domstor
     }
 
     // Заменяет метку %filter в строке на текущие праметры фильтра
-    protected function _replaceFilterHref($href_tmpl) {
-        if ($this->filter)
+    protected function _replaceFilterHref($href_tmpl)
+    {
+        if ($this->filter) {
             return $this->filter->replaceString('%filter', $href_tmpl);
+        }
         return str_replace('%filter', '', $href_tmpl);
     }
 
     // Заменяет метку %sort в строке на текущие праметры фильтра
-    protected function _replaceSortHref($href_tmpl) {
-        if (strpos($href_tmpl, '%sort') !== FALSE) {
+    protected function _replaceSortHref($href_tmpl)
+    {
+        if (strpos($href_tmpl, '%sort') !== false) {
             $data = $_GET;
             $out = '';
             if (is_array($data)) {
                 foreach ($data as $key => $value) {
-                    if (strpos($key, 'sort-') === 0)
+                    if (strpos($key, 'sort-') === 0) {
                         $out.= '&' . $key . '=' . $value;
+                    }
                 }
             }
             return str_replace('%sort', $out, $href_tmpl);
-        }
-        else {
+        } else {
             return $href_tmpl;
         }
     }
 
     // Обрабатывает определенный шаблон ссылки
-    protected function _replaceObjectAction(array $params, $href_tmpl) {
+    protected function _replaceObjectAction(array $params, $href_tmpl)
+    {
         $keys[] = '%object';
         $values[] = $params['object'];
         $keys[] = '%action';
@@ -311,7 +333,8 @@ class Domstor_Domstor
     }
 
     // Формирует ссылку на объект
-    protected function _processObjectHref(array $params) {
+    protected function _processObjectHref(array $params)
+    {
         $href = $this->_replaceObjectAction($params, $this->getHrefTemplate('object'));
         $href = $this->_replaceFilterHref($href);
         $href = $this->_replaceSortHref($href);
@@ -320,7 +343,8 @@ class Domstor_Domstor
     }
 
     // Формирует ссылку на страницу списка
-    protected function _processListHref(array $params) {
+    protected function _processListHref(array $params)
+    {
         $href = $this->_replaceObjectAction($params, $this->getHrefTemplate('list'));
         $href = $this->_replaceFilterHref($href);
         $href = $this->_replaceSortHref($href);
@@ -329,7 +353,8 @@ class Domstor_Domstor
     }
 
     // Формирует ссылку на страницы списков других городов
-    protected function _processLocationsHref(array $params) {
+    protected function _processLocationsHref(array $params)
+    {
         $href = $this->_replaceObjectAction($params, $this->getHrefTemplate('list'));
         $href = str_replace(array('%filter', '%sort', '%page'), array('', '', '1'), $href);
         $href.= '&ref_city=%id';
@@ -337,7 +362,8 @@ class Domstor_Domstor
     }
 
     // Формирует ссылку для сортировки списка
-    protected function _processSortHref(array $params) {
+    protected function _processSortHref(array $params)
+    {
         $href = $this->_replaceObjectAction($params, $this->getHrefTemplate('list'));
         $href = $this->_replaceFilterHref($href);
         $href = str_replace('%page', isset($params['page']) ? $params['page'] : '', $href);
@@ -345,24 +371,29 @@ class Domstor_Domstor
         return $href;
     }
 
-    protected function _getLocationInfo($location_id) {
+    protected function _getLocationInfo($location_id)
+    {
         $data = $this->read('/gateway/location/info/' . $location_id);
         return $data;
     }
 
-    public function setCacheDriver(Doctrine_Cache_Interface $cache_driver) {
+    public function setCacheDriver(Doctrine_Cache_Interface $cache_driver)
+    {
         $this->cacheDriver = $cache_driver;
     }
 
-    public function setCacheTime($cache_time) {
+    public function setCacheTime($cache_time)
+    {
         $this->cacheTime = $cache_time;
     }
     
-    public function setCacheUniqKey($cacheUniqKey) {
+    public function setCacheUniqKey($cacheUniqKey)
+    {
         $this->cacheUniqKey = $cacheUniqKey;
     }
 
-    public function createFilter($object, $action, array $filter_factory_params = array()) {
+    public function createFilter($object, $action, array $filter_factory_params = array())
+    {
         if (!isset($filter_factory_params['filter_dir'])) {
             $filter_factory_params['filter_dir'] = $this->filter_tmpl_dir;
         }
@@ -379,7 +410,8 @@ class Domstor_Domstor
      * @param array $params
      * @return Domstor_List_Common
      */
-    public function getList($object, $action, $page, array $params = array()) {
+    public function getList($object, $action, $page, array $params = array())
+    {
         // Упаковываем $object, $action и $page в параметры
         $params['object'] = $object;
         $params['action'] = $action;
@@ -427,7 +459,8 @@ class Domstor_Domstor
         return $list;
     }
 
-    public function getObject($object, $action, $id, array $params = array()) {
+    public function getObject($object, $action, $id, array $params = array())
+    {
         return $this->getDetail($object, $action, $id, $params);
     }
 
@@ -439,7 +472,8 @@ class Domstor_Domstor
      * @param array $params
      * @return false|Domstor_Detail_Supply
      */
-    public function getDetail($object, $action, $id, array $params = array()) {
+    public function getDetail($object, $action, $id, array $params = array())
+    {
         $params['object'] = $object;
         $params['action'] = $action;
         $params['oid'] = $id;
@@ -454,8 +488,9 @@ class Domstor_Domstor
 
         // Получаем данные
         $data = $this->_getData($url);
-        if (!isset($data['id']))
-            return NULL;
+        if (!isset($data['id'])) {
+            return null;
+        }
 
         // Создаем фабрику объектов
         $factory = new Domstor_Detail_DetailFactory;
@@ -469,16 +504,18 @@ class Domstor_Domstor
         return $obj;
     }
 
-    public function getCount($object, $action, $params = array()) {
+    public function getCount($object, $action, $params = array())
+    {
         $params['object'] = $object;
         $params['action'] = $action;
         $url = $this->_getCountRequest($params);
-        $cache_time = isset($params['cache']) ? $params['cache'] : NULL;
+        $cache_time = isset($params['cache']) ? $params['cache'] : null;
         $data = $this->_getData($url, $cache_time);
         return $data[0];
     }
     
-    public function getAllCounts(array $settings = array(), array $params = array()) {
+    public function getAllCounts(array $settings = array(), array $params = array())
+    {
         $result = array();
         $s = array_replace(array(
             'living' => true,
@@ -486,9 +523,8 @@ class Domstor_Domstor
             'with_empty' => false,
         ), $settings);
 
-        if ($s['living'])
-        {
-            foreach(Domstor_Helper::getLivingTypes() as $object) {
+        if ($s['living']) {
+            foreach (Domstor_Helper::getLivingTypes() as $object) {
                 foreach (Domstor_Helper::getActions($object) as $action) {
                     $c = $this->getCount($object, $action, $params);
                     if ($c > 0 || $s['with_empty']) {
@@ -498,9 +534,8 @@ class Domstor_Domstor
             }
         }
             
-        if ($s['commerce'])
-        {
-            foreach(Domstor_Helper::getCommerceTypes() as $object) {
+        if ($s['commerce']) {
+            foreach (Domstor_Helper::getCommerceTypes() as $object) {
                 $result[$object] = array();
                 foreach (Domstor_Helper::getActions($object) as $action) {
                     $c = $this->getCount($object, $action, $params);
@@ -514,16 +549,17 @@ class Domstor_Domstor
         return $result;
     }
 
-    public function generateSiteMap($object, $action, array $params = array()) {
+    public function generateSiteMap($object, $action, array $params = array())
+    {
         // Упаковываем $object, $action и $page в параметры
         $params['object'] = $object;
         $params['action'] = $action;
 
-//		$filter = $this->createFilter($object, $action);
-//		if( $filter )
-//		{
-//			$filter->bindFromRequest();
-//		}
+        //		$filter = $this->createFilter($object, $action);
+        //		if( $filter )
+        //		{
+        //			$filter->bindFromRequest();
+        //		}
         // Получаем url запроса на основе параметров
         $url = $this->_getSitemapRequest($params);
         //echo $url, '<br>';
@@ -538,7 +574,8 @@ class Domstor_Domstor
         $this->getSiteMapGenerator()->generate();
     }
 
-    public function getLocationsList($object, $action, array $params = array()) {
+    public function getLocationsList($object, $action, array $params = array())
+    {
         //if( !$this->home_location ) return FALSE;
         $params['object'] = $object;
         $params['action'] = $action;
@@ -552,55 +589,67 @@ class Domstor_Domstor
         return $list;
     }
 
-    public function displayLocationsList($object, $action, $prefix = NULL, array $params = array()) {
+    public function displayLocationsList($object, $action, $prefix = null, array $params = array())
+    {
         if ($list = $this->getLocationsList($object, $action, $params)) {
             echo $list->display($prefix);
         }
     }
 
-    public function getLocationName($pad = 'im') {
+    public function getLocationName($pad = 'im')
+    {
         $id = isset($_GET['ref_city']) ? $_GET['ref_city'] : $this->home_location;
         $data = $this->read('/gateway/location/name/' . $id . '/' . $pad, false);
         return $data[0];
     }
 
-    public function displayFilter($object, $action, $return = FALSE) {
-        if (is_null($this->filter))
+    public function displayFilter($object, $action, $return = false)
+    {
+        if (is_null($this->filter)) {
             $this->createFilter($object, $action);
+        }
         if ($this->filter) {
-            if ($return)
+            if ($return) {
                 return $this->filter->render();
+            }
             $this->filter->display();
         }
     }
 
-    public function setMyId($value) {
+    public function setMyId($value)
+    {
         $this->my_id = (int) $value;
         return $this;
     }
 
-    public function getMyId() {
+    public function getMyId()
+    {
         return $this->my_id;
     }
 
-    public function setFilterTmplDir($value) {
+    public function setFilterTmplDir($value)
+    {
         $this->filter_tmpl_dir = $value;
         return $this;
     }
 
-    public function getFilterTmplDir() {
+    public function getFilterTmplDir()
+    {
         return $this->filter_tmpl_dir;
     }
 
-    public function getDetailTmplDir() {
+    public function getDetailTmplDir()
+    {
         return $this->detail_tmpl_dir;
     }
 
-    public function setDetailTmplDir($detail_tmpl_dir) {
+    public function setDetailTmplDir($detail_tmpl_dir)
+    {
         $this->detail_tmpl_dir = $detail_tmpl_dir;
     }
 
-    public function setHomeLocation($value) {
+    public function setHomeLocation($value)
+    {
         if (is_null($value)) {
             $this->home_location = null;
             $this->deleteParam('ref_city');
@@ -610,16 +659,19 @@ class Domstor_Domstor
         }
     }
 
-    public function setServerName($value) {
+    public function setServerName($value)
+    {
         $this->server_name = $value;
         return $this;
     }
 
-    public function getServerName() {
+    public function getServerName()
+    {
         return $this->server_name;
     }
 
-    public function getFilter($object = null, $action = null) {
+    public function getFilter($object = null, $action = null)
+    {
         if (!$this->filter) {
             if ($object and $action) {
                 $this->createFilter($object, $action);
@@ -628,63 +680,79 @@ class Domstor_Domstor
         return $this->filter;
     }
 
-    public function setParams(array $value) {
+    public function setParams(array $value)
+    {
         $this->params = $value;
         return $this;
     }
 
-    public function deleteParam($name) {
-        if ($this->hasParam($name))
+    public function deleteParam($name)
+    {
+        if ($this->hasParam($name)) {
             unset($this->params[$name]);
+        }
     }
 
-    public function addParams(array $value) {
+    public function addParams(array $value)
+    {
         $this->params = array_merge($this->params, $value);
         return $this;
     }
 
-    public function addParam($name, $value) {
+    public function addParam($name, $value)
+    {
         $this->params[$name] = $value;
         return $this;
     }
 
-    public function hasParam($name, array $params = array()) {
-        if (!count($params))
+    public function hasParam($name, array $params = array())
+    {
+        if (!count($params)) {
             $params = &$this->params;
+        }
         return array_key_exists($name, $params);
     }
 
-    public function getParam($name) {
-        if ($this->hasParam($name))
+    public function getParam($name)
+    {
+        if ($this->hasParam($name)) {
             return $this->params[$name];
+        }
     }
 
-    public function getParams() {
+    public function getParams()
+    {
         return $this->params;
     }
 
-    public function clearParams() {
+    public function clearParams()
+    {
         $this->params = array();
         return $this;
     }
 
-    public function getRealParam($name) {
-        if (isset($_GET[$name]))
+    public function getRealParam($name)
+    {
+        if (isset($_GET[$name])) {
             return $_GET[$name];
+        }
         return $this->getParam($name);
     }
 
-    public function setDefaultSort(array $sort) {
+    public function setDefaultSort(array $sort)
+    {
         $this->getSortClient()->setDefault($sort);
         return $this;
     }
 
-    public function clearDefaultSort() {
+    public function clearDefaultSort()
+    {
         $this->setDefaultSort(array());
         return $this;
     }
 
-    public function setExposition($days) {
+    public function setExposition($days)
+    {
         if ($days == 0) {
             unset($this->params['edit_dt']);
             return $this;
@@ -695,11 +763,12 @@ class Domstor_Domstor
         return $this;
     }
 
-    public function read($uri) {
+    public function read($uri)
+    {
         return $this->_getData('http://' . $this->getServerName() . $uri);
     }
 
-    protected function _getData($url, $cache = NULL)
+    protected function _getData($url, $cache = null)
     {
         if ($this->mainDataProvider === null) {
             $urlReader = $this->cacheDriver === null?
@@ -711,7 +780,8 @@ class Domstor_Domstor
         return $this->mainDataProvider->getData($url);
     }
 
-    public function getSortClient() {
+    public function getSortClient()
+    {
         return $this->sort_client;
     }
 
@@ -719,95 +789,121 @@ class Domstor_Domstor
      *
      * @return SP_Helper_Pager
      */
-    public function getPager() {
+    public function getPager()
+    {
         return $this->pager;
     }
 
-    public function setHrefTemplate($name, $value) {
+    public function setHrefTemplate($name, $value)
+    {
         if (!array_key_exists($name, $this->href_tmpls)) {
-            throw new Exception(sprintf('Unavailable template "%s", available templates are: %s',
-                $name, implode(', ', array_keys($this->href_tmpls))));
+            throw new Exception(sprintf(
+                'Unavailable template "%s", available templates are: %s',
+                $name,
+                implode(', ', array_keys($this->href_tmpls))
+            ));
         }
         $this->href_tmpls[$name] = $value;
         return $this;
     }
 
-    public function getHrefTemplate($name) {
+    public function getHrefTemplate($name)
+    {
         return $this->href_tmpls[$name];
     }
     
-    public function setHrefPlaceholder($name, $value) {
+    public function setHrefPlaceholder($name, $value)
+    {
         if (!array_key_exists($name, $this->href_placeholders)) {
-            throw new Exception(sprintf('Unavailable placeholder "%s", available placeholders are: %s',
-                $name, implode(', ', array_keys($this->href_placeholders))));
+            throw new Exception(sprintf(
+                'Unavailable placeholder "%s", available placeholders are: %s',
+                $name,
+                implode(', ', array_keys($this->href_placeholders))
+            ));
         }
         $this->href_placeholders[$name] = $value;
         return $this;
     }
     
-    public function getHrefPlaceholder($name) {
+    public function getHrefPlaceholder($name)
+    {
         return $this->href_placeholders[$name];
     }
 
-    public function setEmptyListMessage($value) {
+    public function setEmptyListMessage($value)
+    {
         $this->empty_list_message = $value;
     }
 
-    protected function _isInRegion() {
-        if (isset($_GET['inreg']))
-            return TRUE;
+    protected function _isInRegion()
+    {
+        if (isset($_GET['inreg'])) {
+            return true;
+        }
         $ref_city_param = $this->getRealParam('ref_city');
         $loc_id = $ref_city_param ? $ref_city_param : $this->home_location;
-        if (!$loc_id)
+        if (!$loc_id) {
             return $this->in_region;
+        }
         $info = $this->_getLocationInfo($loc_id);
         if (isset($info['type'])) {
             return $info['type'] == '2';
         }
     }
 
-    public function inRegion($value = NULL) {
-        if (is_null($value))
+    public function inRegion($value = null)
+    {
+        if (is_null($value)) {
             return $this->_isInRegion();
+        }
 
         $this->in_region = (bool) $value;
         return $this;
     }
 
-    public function check($object, $action) {
+    public function check($object, $action)
+    {
         return Domstor_Helper::checkEstateAction($object, $action);
     }
 
-    public function setPaginationOnPage($value) {
+    public function setPaginationOnPage($value)
+    {
         $value = (int) $value;
-        if ($value > 0)
+        if ($value > 0) {
             $this->getPager()->set('on_page', $value);
+        }
     }
 
-    public function setPaginationCount($pagination_count) {
+    public function setPaginationCount($pagination_count)
+    {
         $this->pagination_count = $pagination_count;
     }
 
-    public function getListLink($object, $action) {
+    public function getListLink($object, $action)
+    {
         $page = $this->loadPageNumber();
         $link = $this->_processListHref(array('object' => $object, 'action' => $action));
         $link = str_replace('%page', $page, $link);
         return $link;
     }
 
-    public function savePageNumber($val) {
+    public function savePageNumber($val)
+    {
         if (!isset($_SESSION)) {
             $started = @session_start();
-            if (!$started)
+            if (!$started) {
                 return $this;
+            }
         }
         $_SESSION['domstor_from_page'] = $val;
         return $this;
     }
 
-    public function loadPageNumber() {
-        if (!isset($_SESSION))
+    public function loadPageNumber()
+    {
+        if (!isset($_SESSION)) {
             session_start();
+        }
         $page = isset($_SESSION['domstor_from_page']) ? (int) $_SESSION['domstor_from_page'] : 1;
         return $page;
     }
@@ -816,8 +912,8 @@ class Domstor_Domstor
      *
      * @return Domstor_Filter_DataLoaderConfig
      */
-    public function getFilterDataLoaderConfig() {
+    public function getFilterDataLoaderConfig()
+    {
         return $this->filter_data_loader_config;
     }
-
 }

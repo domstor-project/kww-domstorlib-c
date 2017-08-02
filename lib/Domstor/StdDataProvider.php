@@ -10,7 +10,7 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class Domstor_StdDataProvider  implements Domstor_DataProviderInterface
+class Domstor_StdDataProvider implements Domstor_DataProviderInterface
 {
     /**
      *
@@ -35,7 +35,8 @@ class Domstor_StdDataProvider  implements Domstor_DataProviderInterface
         return $data;
     }
 
-    public function convert(&$val, $key) {
+    public function convert(&$val, $key)
+    {
         $val = iconv('windows-1251', 'utf-8', $val);
     }
 }

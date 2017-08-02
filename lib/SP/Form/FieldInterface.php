@@ -4,8 +4,8 @@
  *
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-interface SP_Form_FieldInterface {
-
+interface SP_Form_FieldInterface
+{
     public function setName($value);
 
     public function getName();

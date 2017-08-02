@@ -72,7 +72,7 @@ abstract class Doctrine_Cache_Driver implements Doctrine_Cache_Interface
      */
     public function getOption($option)
     {
-        if ( ! isset($this->_options[$option])) {
+        if (! isset($this->_options[$option])) {
             return null;
         }
 
@@ -227,7 +227,7 @@ abstract class Doctrine_Cache_Driver implements Doctrine_Cache_Interface
     {
         $prefix = isset($this->_options['prefix']) ? $this->_options['prefix'] : '';
 
-        if ( ! $prefix || strpos($id, $prefix) === 0) {
+        if (! $prefix || strpos($id, $prefix) === 0) {
             return $id;
         } else {
             return $prefix . $id;

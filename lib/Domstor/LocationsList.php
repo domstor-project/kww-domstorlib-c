@@ -1,31 +1,35 @@
 <?php
 
-class Domstor_LocationsList {
-
+class Domstor_LocationsList
+{
     protected $_data = array();
     protected $_href_tmpl = '';
     protected $_home_id;
     protected $_prefix = 'Недвижимость ';
 
-    public function __construct(array $data, $href_tmpl, $home_id) {
+    public function __construct(array $data, $href_tmpl, $home_id)
+    {
         $this->_data = $data;
         $this->_href_tmpl = $href_tmpl;
         $this->_home_id = $home_id;
     }
 
-    public function getArray() {
+    public function getArray()
+    {
         $out = array();
         foreach ($this->_data as $data) {
             $out[$data['id']]['name'] = $data['name'];
             $out[$data['id']]['uri_part'] = '&ref_city=' . $data['id'];
-            if ($in_region = ($data['type'] == 2))
+            if ($in_region = ($data['type'] == 2)) {
                 $out[$data['id']]['uri_part'].= '&inreg';
+            }
             $out[$data['id']]['is_region'] = $in_region;
         }
         return $out;
     }
 
-    public function getLinks($prefix = NULL) {
+    public function getLinks($prefix = null)
+    {
         $links = array();
 
         if (!$prefix) {
@@ -47,7 +51,8 @@ class Domstor_LocationsList {
         return $links;
     }
 
-    public function render($prefix = NULL) {
+    public function render($prefix = null)
+    {
         $links = $this->getLinks($prefix);
         $html = '';
 
@@ -58,12 +63,13 @@ class Domstor_LocationsList {
         return $html;
     }
 
-    public function display($prefix = NULL) {
+    public function display($prefix = null)
+    {
         echo $this->render($prefix);
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->render();
     }
-
 }

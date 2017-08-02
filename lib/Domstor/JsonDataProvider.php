@@ -34,4 +34,3 @@ class Domstor_JsonDataProvider implements Domstor_DataProviderInterface
         return $data;
     }
 }
-

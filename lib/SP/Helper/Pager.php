@@ -3,8 +3,8 @@
 /**
  * @author Pavel Stepanets <pahhan.ne@gmail.com>
  */
-class SP_Helper_Pager {
-
+class SP_Helper_Pager
+{
     protected $on_page = 20;
     protected $pager_count = 5;
     protected $total;
@@ -18,11 +18,13 @@ class SP_Helper_Pager {
     protected $current;
     protected $data;
 
-    public function __construct($params = array()) {
+    public function __construct($params = array())
+    {
         $this->init($params);
     }
 
-    public function init($params = array()) {
+    public function init($params = array())
+    {
         if (is_array($params)) {
             foreach ($params as $name => $param) {
                 $this->$name = $param;
@@ -30,17 +32,20 @@ class SP_Helper_Pager {
         }
     }
 
-    public function process($current) {
+    public function process($current)
+    {
         $total = $this->total;
         $on_page = $this->on_page;
         $pager_count = $this->pager_count;
         $plus = 0;
 
-        if ($total <= $on_page)
+        if ($total <= $on_page) {
             return false;
+        }
 
-        if ($total % $on_page)
+        if ($total % $on_page) {
             $plus = 1;
+        }
         $out['last_page'] = (int) (floor($total / $on_page)) + $plus;
 
         $out['prev'] = $current - 1;
@@ -72,16 +77,18 @@ class SP_Helper_Pager {
                 if ($before_check < 0) {
                     $before = 1;
                     $after = $after - $before_check;
-                    if ($after > $out['last_page'])
+                    if ($after > $out['last_page']) {
                         $after = $out['last_page'];
+                    }
                 }
 
                 $after_check = $after - $out['last_page'];
                 if ($after_check > 0) {
                     $after = $out['last_page'];
                     $before = $before - $after_check;
-                    if ($before < 1)
+                    if ($before < 1) {
                         $before = 1;
+                    }
                 }
             }
 
@@ -93,47 +100,59 @@ class SP_Helper_Pager {
         return true;
     }
 
-    public function getFirst() {
+    public function getFirst()
+    {
         return 1;
     }
 
-    public function getLast() {
+    public function getLast()
+    {
         return $this->data['last_page'];
     }
 
-    public function getPrev() {
+    public function getPrev()
+    {
         return $this->data['prev'];
     }
 
-    public function getCurrent() {
+    public function getCurrent()
+    {
         return $this->data['current'];
     }
 
-    public function getNext() {
+    public function getNext()
+    {
         return $this->data['next'];
     }
 
-    public function isLast() {
+    public function isLast()
+    {
         return $this->data['is_last'];
     }
 
-    public function isFirst() {
+    public function isFirst()
+    {
         return $this->data['is_first'];
     }
 
-    public function getPages() {
+    public function getPages()
+    {
         return $this->data['pages'];
     }
 
-    public function getPagerCount() {
+    public function getPagerCount()
+    {
         return $this->pager_count;
     }
 
-    public function renderHref($href, $current, $replaces = array()) {
-        if (!$href)
+    public function renderHref($href, $current, $replaces = array())
+    {
+        if (!$href) {
             $href = $this->href_tmpl;
-        if (!$current)
+        }
+        if (!$current) {
             $current = $this->getCurrent();
+        }
         if (is_array($replaces) and count($replaces) > 0) {
             $keys = array_keys($replaces);
             $values = array_values($replaces);
@@ -144,21 +163,26 @@ class SP_Helper_Pager {
         return str_replace($keys, $values, $href);
     }
 
-    public function set($name, $value) {
+    public function set($name, $value)
+    {
         $this->$name = $value;
         return $this;
     }
 
-    public function get($name) {
-        if (isset($this->$name))
+    public function get($name)
+    {
+        if (isset($this->$name)) {
             return $this->$name;
+        }
     }
 
-    public function render() {
-        return $this->display($this->current, array(), TRUE);
+    public function render()
+    {
+        return $this->display($this->current, array(), true);
     }
 
-    public function display($current, $replaces = array(), $return = false) {
+    public function display($current, $replaces = array(), $return = false)
+    {
         if (!$this->process($current)) {
             return '';
         }
@@ -190,5 +214,4 @@ class SP_Helper_Pager {
         
         echo $out;
     }
-
 }

@@ -15,13 +15,13 @@ class Domstor_CacheUrlReader implements Domstor_UrlReaderInterface
     
     /**
      *
-     * @var Doctrine_Cache_Interface 
+     * @var Doctrine_Cache_Interface
      */
     private $cacheDriver;
     
     /**
      *
-     * @var integer 
+     * @var integer
      */
     private $cacheTime;
     

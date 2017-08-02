@@ -17,21 +17,19 @@ class Domstor_List_Field_Commerce_PriceWithBusiness extends Domstor_List_Field_C
     }
 
     public function getValue()
-	{
-		$a = $this->table->getRow();
-        if( !isset($a['price_with_business']) ) {
+    {
+        $a = $this->table->getRow();
+        if (!isset($a['price_with_business'])) {
             return;
         }
 
         $out = '';
-		$price = (float) $a['price_with_business'];
-        if( $price ) {
+        $price = (float) $a['price_with_business'];
+        if ($price) {
             $out = number_format($price, 0, ',', ' ');
             $out.= isset($a['price_currency'])? ' '.$a['price_currency'] : '';
         }
 
         return $out;
     }
-
 }
-

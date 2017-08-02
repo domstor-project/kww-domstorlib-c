@@ -10,4 +10,3 @@ class Domstor_Exception extends Exception
 {
     //put your code here
 }
-
