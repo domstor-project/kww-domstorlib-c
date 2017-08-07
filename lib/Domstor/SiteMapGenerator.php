@@ -21,7 +21,7 @@ class Domstor_SiteMapGenerator
 
     /**
      * Cache driver for xml caching
-     * @var SP_Cache_Interface
+     * @var Doctrine_Cache_Interface
      */
     protected $_cache_driver;
 
@@ -131,8 +131,8 @@ class Domstor_SiteMapGenerator
 
     /**
      * Creates cache driver
-     * @param srting $type
-     * @param array $params
+     * @param string $type
+     * @param array $options
      * @return Doctrine_Cache_Interface
      * @throws InvalidArgumentException
      */

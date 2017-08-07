@@ -84,7 +84,7 @@ abstract class SP_Form_AbstractField implements SP_Form_FieldInterface
 
     public function getMethod()
     {
-        $method = is_null($this->_form) ? $this->_method : $this->_form_->getMethod();
+        $method = is_null($this->_form) ? $this->_method : $this->_form->getMethod();
         return $method;
     }
 

@@ -395,6 +395,7 @@ class HtmlMinMaxTableField extends HtmlTableField
     {
         $row = $this->table->getRow();
         $out = '';
+        $space = '';
         if (isset($this->min)) {
             $this->min_value = $row[$this->min];
         }

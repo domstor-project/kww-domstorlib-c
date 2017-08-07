@@ -159,7 +159,7 @@ class SP_Helper_Pager
         }
         $keys[] = '%page';
         var_dump($this->href_page_part);
-        $values[] = $this->href_page_part ? strreplace('%page_number', $current, $this->href_page_part) : $current;
+        $values[] = $this->href_page_part ? str_replace('%page_number', $current, $this->href_page_part) : $current;
         return str_replace($keys, $values, $href);
     }
 

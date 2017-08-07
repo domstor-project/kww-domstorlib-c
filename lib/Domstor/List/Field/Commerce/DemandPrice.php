@@ -36,7 +36,7 @@ class Domstor_List_Field_Commerce_DemandPrice extends Domstor_List_Field_Common
 
     public function getFormatedRent()
     {
-        $a = &$this->object;
+        $a = $this->table->getRow();//&$this->object;
         $out = '';
         if ($a['rent_full']) {
             $out=number_format($a['rent_full'], 0, ',', ' ');

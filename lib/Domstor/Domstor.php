@@ -270,8 +270,8 @@ class Domstor_Domstor
             'uri_part' => '&%name%=%desc%',
             'input' => $_GET,
         );
-        $list_params['exchange_flat_href'] = $this->getHrefTEmplate('flat_purchase');
-        $list_params['exchange_house_href'] = $this->getHrefTEmplate('house_purchase');
+        $list_params['exchange_flat_href'] = $this->getHrefTemplate('flat_purchase');
+        $list_params['exchange_house_href'] = $this->getHrefTemplate('house_purchase');
         return $list_params;
     }
 
@@ -285,8 +285,8 @@ class Domstor_Domstor
         $object_params['id_placeholder'] = $this->getHrefPlaceholder('id');
         $object_params['_action'] = $params['action'];
         $object_params['action'] = ($params['action'] == 'rent' or $params['action'] == 'rentuse') ? 'rent' : 'sale';
-        $object_params['exchange_flat_href'] = $this->getHrefTEmplate('flat_purchase');
-        $object_params['exchange_house_href'] = $this->getHrefTEmplate('house_purchase');
+        $object_params['exchange_flat_href'] = $this->getHrefTemplate('flat_purchase');
+        $object_params['exchange_house_href'] = $this->getHrefTemplate('house_purchase');
         $object_params['commerce_href'] = $this->getHrefTemplate('commerce_sale');
         if ($this->detail_tmpl_dir) {
             $object_params['tmpl_dir'] = $this->getDetailTmplDir();
