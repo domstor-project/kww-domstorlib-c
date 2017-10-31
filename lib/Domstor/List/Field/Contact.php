@@ -44,7 +44,7 @@ class Domstor_List_Field_Contact extends Domstor_List_Field_Common
                 {
                     $cleared[0] = '7';
                 }
-                $word = sprintf('<a href="tel:+%s">+%s</a>', $cleared, $word);
+                $word = sprintf('<a href="tel:+%s">%s</a>', $cleared, $word);
             }
 
         }

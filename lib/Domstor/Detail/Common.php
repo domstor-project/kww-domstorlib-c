@@ -356,7 +356,7 @@ abstract class Domstor_Detail_Common
                     {
                         $cleared[0] = '7';
                     }
-                    $word = sprintf('<a href="tel:+%s">+%s</a>', $word, $word);
+                    $word = sprintf('<a href="tel:+%s">%s</a>', $cleared, $word);
                 }
             }
             $phone = implode(', ', $words);
