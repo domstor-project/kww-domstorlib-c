@@ -340,6 +340,34 @@ abstract class Domstor_Detail_Common
                 break;
         }
 
+
+        if (strlen($phone)>0)
+        {
+            $phone = str_replace(',', ', ', $phone);
+
+            $words = explode(', ', $phone);
+
+            foreach ($words as &$word)
+            {
+                $cleared = preg_replace('/[^0-9]/', '', $word);
+                if (strlen($cleared) > 10)
+                {
+                    if ($cleared[0] === '8')
+                    {
+                        $cleared[0] = '7';
+                    }
+                    $word = sprintf('<a href="tel:+%s">+%s</a>', $word, $word);
+                }
+            }
+            $phone = implode(', ', $words);
+        }
+
+        if (strlen($mail)>0)
+        {
+            $mail = sprintf('<a href="mailto:%s">%s', $mail, $mail);
+        }
+
+
         if (!$a['Agency']['hide_agent'] or $a['Agency']['tipcont'] == '3') {
             $out.=$this->getIf($a['Agent']['name_as'], '<p>Агент: ', '</p>');
         }
